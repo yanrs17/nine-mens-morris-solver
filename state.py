@@ -7,9 +7,9 @@
 
 from search import *
 
-class Game():
+class State:
 
-    def __init__(self, firstmove, difficulty):
+    def __init__(self, firstmove, difficulty, isNew=False):
         """
         Create a Nine Men's Morris state
 
@@ -34,7 +34,7 @@ class Game():
 
         # Cell Types
         # -1 means x (The cell is impossible to be reached by any player)
-        #  0 means empty (The cell is Unoccupied but is reachable by any player)
+        #  0 means _ (The cell is unoccupied but reachable by any player)
         #  1 means w (The cell is currently occupied by the White player)
         #  2 means b (The cell is currently occupied by the Black player)
         self.cell_types = {-1: 'x', 0: '_', 1: 'w', 2: 'b'}

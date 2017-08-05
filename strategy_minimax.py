@@ -9,5 +9,4 @@ class StrategyMinimax(Strategy):
         '''
         Suggest a next move
         '''
-    
-    
+        pass

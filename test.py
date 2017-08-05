@@ -25,7 +25,7 @@ def isMill(b, player):
     """
     all_mill_possibilities = [ # 16 possibilities
         # Outer 3
-        [b[0][0], b[3][0], b[6][0]],
+        [b[0][0], b[3][0], b[6][0]], # every 3 pieces form an "m"
         [b[0][0], b[0][3], b[0][6]],
         [b[0][6], b[3][6], b[6][6]],
         [b[6][0], b[6][3], b[6][6]],
@@ -46,8 +46,16 @@ def isMill(b, player):
         [b[4][3], b[5][3], b[6][3]]
         ]
 
-    # "lambda p: p == player" means each piece (e.g. b[0][0]) returns 
+    # "lambda p: p == player" means each piece (e.g. b[0][0]) 
+    #       returns true if it is occupied by the argument "player"
+    # "all(list(map(lambda p: p == player, m)))" means each mill condition "m"
+    #       returns true iff ALL of them (e.g. [b[0][0], b[3][0], b[6][0]]) are true
+    # "lambda m: all(list(map(lambda p: p == player, m)" means whether
+    #       each m forms a mill
+    # "True in ..." means the board forms a mill as long as one of them is a mill
     return True in list(map(lambda m: all(list(map(lambda p: p == player, m))), all_mill_possibilities))
+
+# def 
 
 if __name__ == '__main__': 
     import doctest
