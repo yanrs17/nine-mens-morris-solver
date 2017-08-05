@@ -55,7 +55,27 @@ def isMill(b, player):
     # "True in ..." means the board forms a mill as long as one of them is a mill
     return True in list(map(lambda m: all(list(map(lambda p: p == player, m))), all_mill_possibilities))
 
-# def 
+def pieces_left_onboard(self, board, player):
+    """
+
+    >>> b = [['u' for i in range(7)] for j in range(7)]
+    >>> pieces_left_onboard(b, 'u')
+    49
+    >>> pieces_left_onboard(b, 'b')
+    0
+    >>> pieces_left_onboard(b, 'w')
+    0
+    >>> b[0][0] = 'b'
+    >>> pieces_left_onboard(b, 'u')
+    48
+    >>> pieces_left_onboard(b, 'b')
+    1
+    >>> pieces_left_onboard(b, 'w')
+    0
+    """
+    # Flatten the board from 2D to 1D
+    flattened = [item for sublist in board for item in sublist]
+    return sum(list(map(lambda piece: 1 if piece == player else 0, flattened)))
 
 if __name__ == '__main__': 
     import doctest
