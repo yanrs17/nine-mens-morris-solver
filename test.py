@@ -46,7 +46,7 @@ def isMill(b, player):
         [b[4][3], b[5][3], b[6][3]]
         ]
 
-
+    # "lambda p: p == player" means each piece (e.g. b[0][0]) returns 
     return True in list(map(lambda m: all(list(map(lambda p: p == player, m))), all_mill_possibilities))
 
 if __name__ == '__main__': 
