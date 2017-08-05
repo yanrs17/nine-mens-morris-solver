@@ -18,7 +18,15 @@ class Game():
         """
         self.width = 7
         self.height = 7
-        # self.grid = grid
+        self.grid = [
+            [0, -1, -1, 0, -1, -1, 0],
+            [-1, 0, -1, 0, -1, 0, -1],
+            [-1, -1, 0, 0, 0, -1, -1],
+            [0, 0, 0, -1, 0, 0, 0],
+            [-1, -1, 0, 0, 0, -1, -1],
+            [-1, 0, -1, 0, -1, 0, -1],
+            [0, -1, -1, 0, -1, -1, 0]
+        ]
         # self.player = player
         
         self.firstmove = firstmove
@@ -29,7 +37,7 @@ class Game():
         #  0 means empty (The cell is Unoccupied but is reachable by any player)
         #  1 means w (The cell is currently occupied by the White player)
         #  2 means b (The cell is currently occupied by the Black player)
-        self.cell_types = {-1: 'x', 0: ' ', 1: 'w', 2: 'b'}
+        self.cell_types = {-1: 'x', 0: '_', 1: 'w', 2: 'b'}
 
     def successors(self):
         """
@@ -61,8 +69,11 @@ class Game():
         """
         Print the string representation of the state. ASCII art FTW!
         """        
-        print("ACTION was " + self.action)      
-        print(self.state_string())
+        for i in range(self.width):
+            for j in range(self.height):
+                print(self.cell_types[self.grid[i][j]], end=" ")
+            print()
     
     def start(self):
         print("game start...")
+        self.print_state()
