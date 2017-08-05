@@ -7,35 +7,55 @@
 
 class State:
 
-    def __init__(self, firstmove, difficulty):
+    def __init__(self, player, is_new = False, grid, piece_not_used):
         """
         Create a Nine Men's Morris state
 
-        firstmove: 1: you move first; 2: computer move first.
-        difficulty: 1: easy; 2: medium: 3: hard
+        player: current user, user or computer.
+        is_new: if we need to init the board.
+        grid: board.
+        piece_not_used: the number of pieces not being placed on grid.
+        Cell Types:
+            -1 means x (The cell is impossible to be reached by any player)
+            0 means empty (The cell is Unoccupied but is reachable by any player)
+            1 means u (The cell is currently occupied by the White player)
+            2 means c (The cell is currently occupied by the Black player)
         """
+        self.grid = []
         self.width = 7
         self.height = 7
-        self.grid = [
-            [0, -1, -1, 0, -1, -1, 0],
-            [-1, 0, -1, 0, -1, 0, -1],
-            [-1, -1, 0, 0, 0, -1, -1],
-            [0, 0, 0, -1, 0, 0, 0],
-            [-1, -1, 0, 0, 0, -1, -1],
-            [-1, 0, -1, 0, -1, 0, -1],
-            [0, -1, -1, 0, -1, -1, 0]
-        ]
-        # self.player = player
-        
-        self.firstmove = firstmove
-        self.difficulty = difficulty
-
-        # Cell Types
-        # -1 means x (The cell is impossible to be reached by any player)
-        #  0 means empty (The cell is Unoccupied but is reachable by any player)
-        #  1 means w (The cell is currently occupied by the White player)
-        #  2 means b (The cell is currently occupied by the Black player)
         self.cell_types = {-1: 'x', 0: '_', 1: 'w', 2: 'b'}
+
+        if player == 'c':
+            self.current_player = 'c'
+            self.opponent = 'u'
+        else: 
+            self.current_player = 'u'
+            self.opponent = 'c'
+
+        if is_new:
+            self.grid = [
+                [0, -1, -1, 0, -1, -1, 0],
+                [-1, 0, -1, 0, -1, 0, -1],
+                [-1, -1, 0, 0, 0, -1, -1],
+                [0, 0, 0, -1, 0, 0, 0],
+                [-1, -1, 0, 0, 0, -1, -1],
+                [-1, 0, -1, 0, -1, 0, -1],
+                [0, -1, -1, 0, -1, -1, 0]
+            ]
+            self.piece_not_used = 9
+        else:
+            self.grid = grid
+            self.piece_not_used = piece_not_used - 1
+
+        self.winner = None
+
+        if check_win_state(self.grid, self.current_player): # check if current user wins.
+            self.winner = self.current_player
+            self.over = True
+        elif check_win_state(self.grid, self.opponent): # check if opponent wins.
+            self.winner = self.opponent
+            self.over = True
 
     def successors(self):
         """
