@@ -5,9 +5,7 @@
     An encoding of the directions of movement that are possible for players in Nine Men's Morris.
 """
 
-from search import *
-
-class Game():
+class State:
 
     def __init__(self, firstmove, difficulty):
         """
@@ -73,7 +71,14 @@ class Game():
             for j in range(self.height):
                 print(self.cell_types[self.grid[i][j]], end=" ")
             print()
+
+    def new_move()
+        
     
     def start(self):
         print("game start...")
         self.print_state()
+        while True:
+            # assume it's user turn first.
+            print("user's turn...")
+            user_move = self.new_move()
