@@ -7,22 +7,22 @@
 
 from search import *
 
-class State(StateSpace):
+class Game():
 
-    def __init__(self, action, gval, parent, grid, player):
+    def __init__(self, firstmove, difficulty):
         """
         Create a Nine Men's Morris state
 
-        @param width:   The width of the grid, in this case it is 7
-        @param height:  The height of the grid, in this case it is 7
-        @param grid:    The board of players with size width * height
-        @param player:  The current player, 1 is white, 2 is black
+        firstmove: 1: you move first; 2: computer move first.
+        difficulty: 1: easy; 2: medium: 3: hard
         """
-        StateSpace.__init__(self, action, gval, parent)
         self.width = 7
         self.height = 7
-        self.grid = grid
-        self.player = player
+        # self.grid = grid
+        # self.player = player
+        
+        self.firstmove = firstmove
+        self.difficulty = difficulty
 
         # Cell Types
         # -1 means x (The cell is impossible to be reached by any player)
@@ -63,3 +63,6 @@ class State(StateSpace):
         """        
         print("ACTION was " + self.action)      
         print(self.state_string())
+    
+    def start(self):
+        print("game start...")
