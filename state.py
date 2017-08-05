@@ -25,11 +25,11 @@ class State(StateSpace):
         self.player = player
 
         # Cell Types
-        # -1 means i (The cell is Impossible to be reached by any player)
-        #  0 means u (The cell is Unoccupied but is reachable by any player)
+        # -1 means x (The cell is impossible to be reached by any player)
+        #  0 means empty (The cell is Unoccupied but is reachable by any player)
         #  1 means w (The cell is currently occupied by the White player)
         #  2 means b (The cell is currently occupied by the Black player)
-        self.cell_types = {-1: 'i', 0: 'u', 1: 'w', 2: 'b'}
+        self.cell_types = {-1: 'x', 0: ' ', 1: 'w', 2: 'b'}
 
     def successors(self):
         """
