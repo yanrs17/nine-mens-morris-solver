@@ -74,8 +74,18 @@ def pieces_left_onboard(self, board, player):
     0
     """
     # Flatten the board from 2D to 1D
+    # Source:
+    # https://stackoverflow.com/questions/952914/making-a-flat-list-out-of-list-of-lists-in-python
     flattened = [item for sublist in board for item in sublist]
     return sum(list(map(lambda piece: 1 if piece == player else 0, flattened)))
+
+def get_coords(board, player):
+    """
+    Get the coordinates for all the pieces of "player" on the board
+    """
+    # Source:
+    # https://stackoverflow.com/questions/27175400/how-to-find-the-index-of-a-value-in-2d-array-in-python
+    return [(ix,iy) for ix, row in enumerate(board) for iy, i in enumerate(row) if i == player]
 
 if __name__ == '__main__': 
     import doctest
