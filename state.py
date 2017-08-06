@@ -25,8 +25,6 @@ class State:
             2 means c (The cell is currently occupied by the Black player)
         """
         self.grid = []
-        self.width = 7
-        self.height = 7
         self.cell_types = {-1: 'x', 0: '_', 1: 'w', 2: 'b'}
 
         if player == 'c':
@@ -71,11 +69,16 @@ class State:
         
         user: 1,
         computer: 2
+
+        Return:
+            True: the player loses
+            False: the player does not lose (it does not mean it wins)
         """
-        flat_list = [piece for row in grid for piece in row]
+        if self.pieces_left_onboard(self.current_player) == 2:
+            return True
+
         player_key = 1 if player == 'u' else 2
         opponent_key = 2 if player_key == 1 else 1
-        number_of_player_pieces = flat_list.count(player_key)
 
         # get_neighbors and check if can move.
         all_blocked = True
@@ -86,13 +89,10 @@ class State:
                 if not self.grid[neighbor[0]][neighbor[1]] == opponent_key: # if any of neighbors is not opponent.
                     all_blocked = False
                     break
-            if all_blocked == False:
+            if not all_blocked:
                 break
-        
-        if number_of_player_pieces == 2 or all_blocked:
-            return True # the player indicated lose
-        else:
-            return False
+
+        return all_blocked
     
     def get_neighbors(self, piece_cord):
         """
@@ -155,12 +155,17 @@ class State:
                     neighbors.append((3, 1))
                 elif y == 4: # (3, 5)
                     neighbors.append((3, 5))
-        print(neighbors)
+        # print(neighbors)
+        return neighbors
 
+<<<<<<< HEAD
 
 
 
     def successors(self):
+=======
+    def get_successors(self):
+>>>>>>> 144309ee269e3da5daf8dca8124cf27cc22b1135
         """
         Generate all the actions that can be performed from this state,
         and the states those actions will create.
@@ -179,9 +184,7 @@ class State:
             else:
                 raise error('Something is wrong')
 
-        if isMill():
-            # Mill: 3 together
-            remove()
+        return get_next_states()
         """
 
         successors = []
@@ -217,11 +220,13 @@ class State:
                             # Similar to 'M' but when removing a piece,
                             # we can remove any piece on the board
                             # instead of in 'M' we have to remove its
-                            # neighbor (origin piece has also to be its neighbor)
+                            # neighbor (origin piece has also to be in its neighbors)
             elif num_pieces == 2:
                 # Lose
-                # TODO CHECK_LOSE_STATE()
-
+                # It is checked in the next state
+                # TODO: EFFICIENCY?
+                pass
+                
             else:
                 # Exception
                 raise
@@ -229,6 +234,7 @@ class State:
             # Exception
             raise
 
+<<<<<<< HEAD
         # TODO CALL ISMILL()
 
         # flag = 'P' # 'P' means to place a piece on the board
@@ -236,19 +242,32 @@ class State:
         return instruction_to_grid(successors)
 
     def instruction_to_grid(self, successors)
+=======
+        return get_next_states(instructions)
+
+    def get_next_states(self, instructions):
+>>>>>>> 144309ee269e3da5daf8dca8124cf27cc22b1135
         """
         Convert instruction and coordinates to actual board
         """
-
-
         next_boards = []
+<<<<<<< HEAD
         for s in successors:
             instruction = s[0] # P or M or F
             x = s[1]
             y = s[2]
+=======
+        oppox_pieces_left = get_coords(self.opponent)
+
+        for instruction, x, y in instructions:
+            # instruction can be either P or M or F
+            
+>>>>>>> 144309ee269e3da5daf8dca8124cf27cc22b1135
             next_board = deepcopy(self.grid)
+
             # Place a piece
             next_board[x][y] = self.current_player
+<<<<<<< HEAD
             
             if instruction == 'P':
                 if (isMill(next_board, self.current_player)):
@@ -261,13 +280,52 @@ class State:
             
 
 
+=======
 
-        # self.instruction_to_grid()
-        
-        # new_grid = self.apply_move(...)
-        # if isMill(self.grid, self.current_player):
-        #     flag = 'm' # Small m means Mill
-    
+            # Get coords of pieces to be moved
+            # according to the instruction
+            if (instruction == 'P'): # Place
+                # We do not remove pieces in "Place"
+                # Just a placeholder for for-loop
+                pieces = ['new','move']
+            elif (instruction == 'M'): # Move
+                # Only neighbor pieces placed by the same player
+                # can achieve the new state, thus remove it
+                neighbors = self.get_neighbors((x,y))
+                pieces = list(filter(lambda key: neighbors[key] == self.current_player, neighbors))
+            elif (instruction == 'F'): # Fly
+                # Any pieces placed by the same player can be removed
+                pieces = self.get_coords(self.current)
+            else:
+                # Error
+                raise
+>>>>>>> 144309ee269e3da5daf8dca8124cf27cc22b1135
+
+            for x,y in pieces:
+
+                new_board = deepcopy(next_board)
+
+                # Move/Fly a piece means the same as
+                # place a piece in a new coord ("Place")
+                # and then remove the piece in the old coord ("Remove")
+                # The "Place" has been finished above
+                # the following just remove the old piece
+                if instruction in ['M', 'F']:
+                    new_board[x][y] = 0
+
+                if (isMill(new_board, self.current_player)):
+                    # Mill: Remove a piece from opponents
+                    # with each piece removed as a new board
+                    for x,y in oppo_pieces_left:
+                        next_mill_board = deepcopy(new_board)
+                        # Remove the original piece
+                        next_mill_board[x][y] = 0
+                        next_boards.append(next_mill_board)
+                        
+                else:
+                    # Just append it
+                    next_boards.append(new_board)
+        return next_boards
     
     def get_coords(self, player):
         """
@@ -279,6 +337,7 @@ class State:
 
     def pieces_left_onboard(self, board, player):
         """
+        Get number of pieces left on the board for @player
 
         >>> b = [['u' for i in range(7)] for j in range(7)]
         >>> pieces_left_onboard(self, b, 'u')
@@ -382,8 +441,8 @@ class State:
         """
         Print the string representation of the state. ASCII art FTW!
         """        
-        for i in range(self.width):
-            for j in range(self.height):
+        for i in range(7):
+            for j in range(7):
                 print(self.cell_types[self.grid[i][j]], end=" ")
             print()
         
@@ -405,10 +464,6 @@ class State:
         elif phase == 3:
             # fly phase.
 
-            
-
-
-
     def start(self):
         print("game start...")
         self.print_state()
@@ -417,6 +472,6 @@ class State:
             print("user's turn...")
             user_move = self.new_move()
 
-
-new_state = State()
-print(new_state.get_coords(1))
+if __name__ == '__main__':
+    new_state = State()
+    print(new_state.get_coords(1))
