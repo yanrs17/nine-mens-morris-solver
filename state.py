@@ -25,13 +25,15 @@ class State:
             2 means c (The cell is currently occupied by the Black player)
         """
         self.grid = []
-        self.cell_types = {-1: 'x', 0: '_', 1: 'w', 2: 'b'}
+        self.cell_types = {-1: 'x', 0: '_', 1: 'u', 2: 'c'}
 
         if player == 'c':
             self.current_player = 'c'
+            self.current_player_key = 2
             self.opponent = 'u'
         else: 
             self.current_player = 'u'
+            self.current_player_key = 1
             self.opponent = 'c'
 
 
@@ -158,14 +160,7 @@ class State:
         # print(neighbors)
         return neighbors
 
-<<<<<<< HEAD
-
-
-
-    def successors(self):
-=======
     def get_successors(self):
->>>>>>> 144309ee269e3da5daf8dca8124cf27cc22b1135
         """
         Generate all the actions that can be performed from this state,
         and the states those actions will create.
@@ -234,53 +229,22 @@ class State:
             # Exception
             raise
 
-<<<<<<< HEAD
-        # TODO CALL ISMILL()
-
-        # flag = 'P' # 'P' means to place a piece on the board
-
-        return instruction_to_grid(successors)
-
-    def instruction_to_grid(self, successors)
-=======
         return get_next_states(instructions)
 
     def get_next_states(self, instructions):
->>>>>>> 144309ee269e3da5daf8dca8124cf27cc22b1135
         """
         Convert instruction and coordinates to actual board
         """
         next_boards = []
-<<<<<<< HEAD
-        for s in successors:
-            instruction = s[0] # P or M or F
-            x = s[1]
-            y = s[2]
-=======
         oppox_pieces_left = get_coords(self.opponent)
 
         for instruction, x, y in instructions:
             # instruction can be either P or M or F
             
->>>>>>> 144309ee269e3da5daf8dca8124cf27cc22b1135
             next_board = deepcopy(self.grid)
 
             # Place a piece
             next_board[x][y] = self.current_player
-<<<<<<< HEAD
-            
-            if instruction == 'P':
-                if (isMill(next_board, self.current_player)):
-
-                next_boards.append(next_board)
-            if instruction == 'M':
-                # next_board
-
-
-            
-
-
-=======
 
             # Get coords of pieces to be moved
             # according to the instruction
@@ -299,7 +263,6 @@ class State:
             else:
                 # Error
                 raise
->>>>>>> 144309ee269e3da5daf8dca8124cf27cc22b1135
 
             for x,y in pieces:
 
@@ -446,11 +409,22 @@ class State:
                 print(self.cell_types[self.grid[i][j]], end=" ")
             print()
         
-    def get_move(self):
-        new_move = input("Please input the cordinates of your position, e.g. 1,2, meaning (1, 2) of the grid.")
-        x = new_move.split(",")[0]
-        y = new_move.split(",")[1]
-        return (x, y)
+    def get_move(self, phase):
+        if phase == 1:
+            new_move = input("Please type the cordinates of your position, e.g. 1,2, meaning (1, 2) of the grid.")
+            x = new_move.split(",")[0]
+            y = new_move.split(",")[1]
+            return (x, y)
+        elif phase == 2:
+            target_piece = input("Select the piece by inputing its cordinates.")
+            target_x = target_piece.split(",")[0]
+            target_y = target_piece.split(",")[1]
+            new_move = input("Please type the cordinates of your intended new position for target piece at ({}, {}).".format(target_x, target_y))
+            move_x = new_move.split(",")[0]
+            move_y = new_move.split(",")[1]
+            return (target_x, target_y), (move_x, move_y)
+
+        
 
     def is_valid_move(self, cord, phase, target = (-1, -1)):
         """
@@ -459,8 +433,16 @@ class State:
         if phase == 1:
             # place phase.
             return cord in self.get_coords(0)
+        
         elif phase == 2:
             # move phase.
+            # 1. target piece should be current player's piece 
+            # 2. target cord should be empty and at its neighbor.
+            is_belong_player = this.grid[target[0]][target[1]] == this.current_player_key
+            is_at_neighbor = cord in self.get_neighbors(target)
+            is_empty = cord in self.get_coords(0)
+            return is_belong_player and is_at_neighbor and is_empty
+
         elif phase == 3:
             # fly phase.
 

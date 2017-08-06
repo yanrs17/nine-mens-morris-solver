@@ -26,13 +26,24 @@ class Game:
         print(self.state)
         while not self.state.over:
             if self.state.current_player == 'u': # user's turn
-                new_move = self.state.get_move()
-                while not new_move in self.state.possible_next_move():
-                    print("Illegal move: ({}, {}), please give a valid cordinates.".format(new_move[0], new_move[1]))
-                    print(self.instruction())
-                    print(self.state)
-                    new_move = self.state.get_move()
-                    
+                if self.state.piece_not_used > 0:
+                    # in Phase 1, place pieces.
+                    new_move = self.state.get_move(phase = 1)
+                    while self.state.is_valid_move(new_move, phase = 1):
+                        print("Illegal move: ({}, {}), please give a valid cordinates.".format(new_move[0], new_move[1]))
+                        print(self.instruction())
+                        print(self.state)
+                        new_move = self.state.get_move(phase = 1)
+                    print("You choose a valid position ({}, {})".format(new_move[0], new_move[1]))
+                elif self.state.piece_not_used == 0 and self.state.pieces_left_onboard(self.state.grid, self.state.current_player) > 3:
+                    # in Phase 2, move pieces.
+                    target, new_move = self.state.get_move(phase = 2)
+                    while self.state.is_valid_move(new_move, phase = 2, target = target):
+                        print("Illegal move or invalid target piece, please give a valid cordinates.")
+                        print(self.instruction())
+                        print(self.state)
+                        target, new_move = self.state.get_move(phase = 2)
 
+                    
 
 
