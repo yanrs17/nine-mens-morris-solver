@@ -157,7 +157,7 @@ class State:
                     neighbors.append((3, 5))
         print(neighbors)
 
-    def successors(self):
+    def get_successors(self):
         """
         Generate all the actions that can be performed from this state,
         and the states those actions will create.
@@ -227,119 +227,65 @@ class State:
             # Exception
             raise
 
-        # TODO CALL ISMILL()
+        return get_next_states(instructions)
 
-        # flag = 'P' 
-
-        return instruction_to_grid(instructions)
-
-    def instruction_to_grid(self, instructions)
+    def get_next_states(self, instructions)
         """
         Convert instruction and coordinates to actual board
         """
-
-
         next_boards = []
+        oppox_pieces_left = get_coords(self.opponent)
 
-        oppo_pieces_left = get_coords(self.opponent)
-
-        for i in instructions:
-            instruction = i[0] # P or M or F
-            x = i[1]
-            y = i[2]
-
+        for instruction, x, y in instructions:
+            # instruction can be either P or M or F
+            
             next_board = deepcopy(self.grid)
+
             # Place a piece
             next_board[x][y] = self.current_player
-            
-            if instruction == 'P': # Place
-                if (isMill(next_board, self.current_player)):
-                    # Place & Mill:
-                    # Remove a piece from opponents
-                    # with each piece removed as a new board
-                    for p in oppo_pieces_left:
-                        x = p[0]
-                        y = p[1]
 
-                        next_mill_board = deepcopy(next_board)
-                        # Remove the original piece
-                        next_mill_board[x][y] = 0
-                        next_boards.append(next_mill_board)
-                else:
-                    # Place with no mill
-                    # Just append it
-                    next_boards.append(next_board)
-            elif instruction == 'M': # Move
-
+            # Get coords of pieces to be moved
+            # according to the instruction
+            if (instruction == 'P'): # Place
+                # We do not remove pieces in "Place"
+                # Just a placeholder for for-loop
+                pieces = ['new','move']
+            elif (instruction == 'M'): # Move
+                # Only neighbor pieces placed by the same player
+                # can achieve the new state, thus remove it
                 neighbors = self.get_neighbors((x,y))
-                for n in neighbors:
-
-                    # Move a piece means the same as
-                    # place a piece in a new coord ("Place")
-                    # and then remove the piece in the old coord ("Remove")
-                    # The "Place" has been finished above
-                    # the following just remove the old piece
-                    move_board = deepcopy(next_board)
-                    move_board[n[0]][n[1]] = 0
-
-
-                    # TODO REFACTOR AS A NEW FUNCTION WITH ABOVE
-                    if (isMill(move_board, self.current_player)):
-                        # Move & Mill:
-                        # Remove a piece from opponents
-                        # with each piece removed as a new board
-                        for p in oppo_pieces_left:
-                            x = p[0]
-                            y = p[1]
-
-                            next_mill_board = deepcopy(move_board)
-                            # Remove the original piece
-                            next_mill_board[x][y] = 0
-                            next_boards.append(next_mill_board)
-                            
-                    else:
-                        next_boards.append(move_board)
-            
-            elif instruction == 'F': # Fly
+                pieces = list(filter(lambda key: neighbors[key] == self.current_player, neighbors))
+            elif (instruction == 'F'): # Fly
+                # Any pieces placed by the same player can be removed
                 pieces = self.get_coords(self.current)
-                for n in pieces:
-
-                    # Fly a piece means the same as
-                    # place a piece in a new coord ("Place")
-                    # and then remove the piece in the old coord ("Remove")
-                    # The "Place" has been finished above
-                    # the following just remove the old piece
-                    fly_board = deepcopy(next_board)
-                    fly_board[n[0]][n[1]] = 0
-
-
-                    # TODO REFACTOR AS A NEW FUNCTION WITH ABOVE
-                    if (isMill(fly_board, self.current_player)):
-                        # Move & Mill:
-                        # Remove a piece from opponents
-                        # with each piece removed as a new board
-                        for p in oppo_pieces_left:
-                            x = p[0]
-                            y = p[1]
-
-                            next_mill_board = deepcopy(fly_board)
-                            # Remove the original piece
-                            next_mill_board[x][y] = 0
-                            next_boards.append(next_mill_board)
-                            
-                    else:
-                        next_boards.append(fly_board)
-
             else:
                 # Error
                 raise
 
-        # self.instruction_to_grid()
-        
-        # new_grid = self.apply_move(...)
-        # if isMill(self.grid, self.current_player):
-        #     flag = 'm' # Small m means Mill
-    
+            for x,y in pieces:
+
+                new_board = deepcopy(next_board)
+
+                # Move/Fly a piece means the same as
+                # place a piece in a new coord ("Place")
+                # and then remove the piece in the old coord ("Remove")
+                # The "Place" has been finished above
+                # the following just remove the old piece
+                if instruction in ['M', 'F']:
+                    new_board[x][y] = 0
+
+                if (isMill(new_board, self.current_player)):
+                    # Mill: Remove a piece from opponents
+                    # with each piece removed as a new board
+                    for x,y in oppo_pieces_left:
+                        next_mill_board = deepcopy(new_board)
+                        # Remove the original piece
+                        next_mill_board[x][y] = 0
+                        next_boards.append(next_mill_board)
+                        
+                else:
+                    # Just append it
+                    next_boards.append(new_board)    
     
     def get_coords(self, player):
         """
