@@ -50,7 +50,7 @@ class State:
             self.piece_not_used = 9
         else:
             self.grid = grid
-            self.piece_not_used = piece_not_used - 1
+            self.piece_not_used = max(piece_not_used - 1, 0) # at least 0.
 
         self.winner = None
 
@@ -393,6 +393,10 @@ class State:
         """
         Given game phases, return different game instructions.
         """
+        if self.piece_not_used > 0:
+            return "Pieces not used up yet, give a position to put the piece on."
+        elif self.piece_not_used == 0 and self.pieces_left_onboard(self.grid, self.current_player) > 2:
+            return "Only allow moving the pieces."
 
     def __str__(self):
         """
@@ -403,7 +407,23 @@ class State:
                 print(self.cell_types[self.grid[i][j]], end=" ")
             print()
         
-    
+    def get_move(self):
+        new_move = input("Please input the cordinates of your position, e.g. 1,2, meaning (1, 2) of the grid.")
+        x = new_move.split(",")[0]
+        y = new_move.split(",")[1]
+        return (x, y)
+
+    def is_valid_move(self, cord):
+        """
+        Check if new_move's cord is valid given its current phase.
+        """
+        if self.piece_not_used > 0: # place phase.
+            return self.get_coords(0)
+        elif self.piece_not_used == 0 and self.pieces_left_onboard(self.grid, self.current_player) > 2: # move phase.
+            
+
+
+
     def start(self):
         print("game start...")
         self.print_state()
