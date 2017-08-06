@@ -195,7 +195,7 @@ class State:
                         successors.append(('P', x, y))
                         
         elif piece_not_used == 0:
-            num_pieces = self.pieces_left_onboard(self.grid, self.current_player)
+            num_pieces = self.pieces_left_onboard(self.current_player)
             if num_pieces > 3:
                 # Move
                 coords = self.get_coords(self.grid, self.current_player)
@@ -236,7 +236,7 @@ class State:
 
     def get_next_states(self, instructions):
         """
-        Convert instruction and coordinates to actual board
+        Convert instruction and coordinates to actual state
         """
         next_boards = []
         oppox_pieces_left = get_coords(self.opponent)
@@ -301,27 +301,27 @@ class State:
         # https://stackoverflow.com/questions/27175400/how-to-find-the-index-of-a-value-in-2d-array-in-python
         return [(ix,iy) for ix, row in enumerate(self.grid) for iy, i in enumerate(row) if i == player]
 
-    def pieces_left_onboard(self, board, player):
+    def pieces_left_onboard(self, player):
         """
         Get number of pieces left on the board for @player
 
         >>> b = [['u' for i in range(7)] for j in range(7)]
-        >>> pieces_left_onboard(self, b, 'u')
+        >>> pieces_left_onboard(self, 'u')
         49
-        >>> pieces_left_onboard(self, b, 'b')
+        >>> pieces_left_onboard(self, 'b')
         0
-        >>> pieces_left_onboard(self, b, 'w')
+        >>> pieces_left_onboard(self, 'w')
         0
         >>> b[0][0] = 'b'
-        >>> pieces_left_onboard(self, b, 'u')
+        >>> pieces_left_onboard(self, 'u')
         48
-        >>> pieces_left_onboard(self, b, 'b')
+        >>> pieces_left_onboard(self, 'b')
         1
-        >>> pieces_left_onboard(self, b, 'w')
+        >>> pieces_left_onboard(self, 'w')
         0
         """
         # Flatten the board from 2D to 1D
-        flattened = [item for sublist in board for item in sublist]
+        flattened = [item for sublist in self.current_player for item in sublist]
         return sum(list(map(lambda piece: 1 if piece == player else 0, flattened)))
 
     def isMill(b, player):
@@ -405,12 +405,14 @@ class State:
 
     def __str__(self):
         """
-        Print the string representation of the state. ASCII art FTW!
-        """        
+        Print the string representation of the state.
+        """
+        result = ''
         for i in range(7):
             for j in range(7):
-                print(self.cell_types[self.grid[i][j]], end=" ")
-            print()
+                result += self.cell_types[self.grid[i][j]]
+            result += '\n'
+        return result
         
     def get_move(self, phase):
         if phase == 1:

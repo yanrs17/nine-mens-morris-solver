@@ -16,7 +16,7 @@ class Game:
         """
         player = ''
         while player not in ['c', 'u']:
-            player = input('Who plays first? c: computer plays first; u: user plays first')
+            player = input('Who plays first?\nc: computer plays first\nu: user plays first\n')
         
         self.state = state(player, is_new = True) # init game state.
         self.strategy = strategy() # init strategy
@@ -71,7 +71,7 @@ class Game:
 
         # if game is over.
         if self.state.winner == 'u':
-            print("You beats computer!")
+            print("You beat computer!")
         elif self.state.winner == 'c':
             print("Computer wins!")
         else:
