@@ -68,10 +68,25 @@ class State:
         """
         flat_list = [piece for row in grid for piece in row]
         player_key = 1 if player == 'u' else 2
+        opponent_key = 2 if player_key == 1 else 1
         number_of_player_pieces = flat_list.count(player_key)
 
         # get_neighbors and check if can move.
-        return True
+        all_blocked = True
+        all_cords = self.get_coords(player_key)
+        for cord in all_cords:
+            its_neighbors = self.get_neighbors(cord)
+            for neighbor in its_neighbors:
+                if not self.grid[neighbor[0]][neighbor[1]] == opponent_key: # if any of neighbors is not opponent.
+                    all_blocked = False
+                    break
+            if all_blocked == False:
+                break
+        
+        if number_of_player_pieces == 2 or all_blocked:
+            return True # the player indicated lose
+        else:
+            return False
     
     def get_neighbors(self, piece_cord):
         """
@@ -205,13 +220,13 @@ class State:
         # TODO CALL ISMILL()
         return successors
 
-    def get_coords(self, board, player):
+    def get_coords(self, player):
         """
         Get the coordinates for all the pieces of "player" on the board
         """
         # Source:
         # https://stackoverflow.com/questions/27175400/how-to-find-the-index-of-a-value-in-2d-array-in-python
-        return [(ix,iy) for ix, row in enumerate(board) for iy, i in enumerate(row) if i == player]
+        return [(ix,iy) for ix, row in enumerate(self.grid) for iy, i in enumerate(row) if i == player]
 
     def pieces_left_onboard(self, board, player):
         """
@@ -326,6 +341,4 @@ class State:
 
 
 new_state = State()
-new_state.get_neighbors((1, 3))
-new_state.get_neighbors((2, 2))
-new_state.get_neighbors((2, 3))
+print(new_state.get_coords(1))
