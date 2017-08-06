@@ -57,6 +57,8 @@ class State:
         if self.check_lose_state(self.grid, self.opponent): # check if current user wins.
             self.winner = self.current_player
             self.over = True
+        else:
+            self.over = False
 
 
     def check_lose_state(self, grid, player):
@@ -217,6 +219,7 @@ class State:
             elif num_pieces == 2:
                 # Lose
                 # TODO CHECK_LOSE_STATE()
+
             else:
                 # Exception
                 raise
@@ -440,8 +443,12 @@ class State:
         """
         return self.grid
 
+    def instructions(self):
+        """
+        Given game phases, return different game instructions.
+        """
 
-    def print_state(self):
+    def __str__(self):
         """
         Print the string representation of the state. ASCII art FTW!
         """        
