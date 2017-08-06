@@ -43,6 +43,16 @@ class Game:
                         print(self.instruction())
                         print(self.state)
                         target, new_move = self.state.get_move(phase = 2)
+                    print("You pick piece at ({}, {}) to move to ({}, {})".format(target[0], target[1], new_move[0], new_move[1]))
+                elif self.state.piece_not_used == 0 and self.state.pieces_left_onboard(self.state.grid, self.state.current_player) == 3:
+                    # in Phase 3, fly pieces.
+                    target, new_move = self.state.get_move(phase = 3)
+                    while self.state.is_valid_move(new_move, phase = 3, target = target):
+                        print("Illegal move or invalid target piece, please give a valid cordinates.")
+                        print(self.instruction())
+                        print(self.state)
+                        target, new_move = self.state.get_move(phase = 3)
+                    print("You pick piece at ({}, {}) to fly to ({}, {})".format(target[0], target[1], new_move[0], new_move[1]))
 
                     
 

@@ -433,7 +433,7 @@ class State:
         if phase == 1:
             # place phase.
             return cord in self.get_coords(0)
-        
+
         elif phase == 2:
             # move phase.
             # 1. target piece should be current player's piece 
@@ -445,6 +445,12 @@ class State:
 
         elif phase == 3:
             # fly phase.
+            # 1. target piece should be current player's piece 
+            # 2. target cord should be empty.
+            is_belong_player = this.grid[target[0]][target[1]] == this.current_player_key
+            is_empty = cord in self.get_coords(0)
+            return is_belong_player and is_empty
+
 
     def start(self):
         print("game start...")
