@@ -5,6 +5,10 @@
     An encoding of the directions of movement that are possible for players in Nine Men's Morris.
 """
 
+from copy import deepcopy
+# Copy a new board from the old board
+#   without aliasing to the old board
+
 class State:
     def __init__(self, player='u', is_new = False, grid=[], piece_not_used=9):
         """
@@ -187,8 +191,8 @@ class State:
             for x in range(7):
                 for y in range(7):
                     if self.grid[x][y] == 0: # Unoccupied
-                        successors.append((x, y, 'P'))
-                        # 'P' means to place a piece on the board
+                        successors.append(('P', x, y))
+                        
         elif piece_not_used == 0:
             num_pieces = self.pieces_left_onboard(self.grid, self.current_player)
             if num_pieces > 3:
@@ -199,8 +203,8 @@ class State:
                     for neighbor in neighbors:
                         x = neighbor[0]
                         y = neighbor[1]
-                        if self.board[x][y] == self.current_player:
-                            successors.append((x, y, 'M'))
+                        if self.board[x][y] == 0:
+                            successors.append(('M', x, y))
                             # 'M' means to move a piece on the board
                             # i.e. Place + Remove
             elif num_pieces == 3:
@@ -208,7 +212,12 @@ class State:
                 for x in range(7):
                     for y in range(7):
                         if self.grid[x][y] == 0: # Unoccupied
-                            successors.append((x, y, 'M'))
+                            successors.append(('F', x, y))
+                            # 'F' means to fly a piece on the board
+                            # Similar to 'M' but when removing a piece,
+                            # we can remove any piece on the board
+                            # instead of in 'M' we have to remove its
+                            # neighbor (origin piece has also to be its neighbor)
             elif num_pieces == 2:
                 # Lose
                 # TODO CHECK_LOSE_STATE()
@@ -221,8 +230,45 @@ class State:
             raise
 
         # TODO CALL ISMILL()
-        return successors
 
+        # flag = 'P' # 'P' means to place a piece on the board
+
+        return instruction_to_grid(successors)
+
+    def instruction_to_grid(self, successors)
+        """
+        Convert instruction and coordinates to actual board
+        """
+
+
+        next_boards = []
+        for s in successors:
+            instruction = s[0] # P or M or F
+            x = s[1]
+            y = s[2]
+            next_board = deepcopy(self.grid)
+            # Place a piece
+            next_board[x][y] = self.current_player
+            
+            if instruction == 'P':
+                if (isMill(next_board, self.current_player)):
+
+                next_boards.append(next_board)
+            if instruction == 'M':
+                # next_board
+
+
+            
+
+
+
+        # self.instruction_to_grid()
+        
+        # new_grid = self.apply_move(...)
+        # if isMill(self.grid, self.current_player):
+        #     flag = 'm' # Small m means Mill
+    
+    
     def get_coords(self, player):
         """
         Get the coordinates for all the pieces of "player" on the board
