@@ -57,6 +57,9 @@ class State:
         if self.check_lose_state(self.grid, self.opponent): # check if current user wins.
             self.winner = self.current_player
             self.over = True
+        elif self.check_lose_state(self.grid, self.current_player):
+            self.winner = self.opponent
+            self.over = True
         else:
             self.over = False
 
@@ -414,8 +417,8 @@ class State:
             new_move = input("Please type the cordinates of your position, e.g. 1,2, meaning (1, 2) of the grid.")
             x = new_move.split(",")[0]
             y = new_move.split(",")[1]
-            return (x, y)
-        elif phase == 2:
+            return (-1, -1), (x, y) # use (-1, -1) represent placing a new piece.
+        elif phase == 2 or phase == 3:
             target_piece = input("Select the piece by inputing its cordinates.")
             target_x = target_piece.split(",")[0]
             target_y = target_piece.split(",")[1]
