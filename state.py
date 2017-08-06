@@ -454,14 +454,17 @@ class State:
             is_empty = cord in self.get_coords(0)
             return is_belong_player and is_empty
 
+    def apply_target_and_move(self, target, new_move):
+        """
+        Given current State, with new target piece and new_move coordinates to produce new State.
 
-    def start(self):
-        print("game start...")
-        self.print_state()
-        while True:
-            # assume it's user turn first.
-            print("user's turn...")
-            user_move = self.new_move()
+        1. the target and new_move must be valid here, even not optimal.abs
+        2. Should handle the isMill situation here. 
+            Especially for user, ask for which piece to remove;
+            for computer side, temporarily pick random piece to remove.
+        """
+
+
 
 if __name__ == '__main__':
     new_state = State()
