@@ -26,7 +26,13 @@ class Game:
         print(self.state)
         while not self.state.over:
             if self.state.current_player == 'u': # user's turn
-                
+                new_move = self.state.get_move()
+                while not new_move in self.state.possible_next_move():
+                    print("Illegal move: ({}, {}), please give a valid cordinates.".format(new_move[0], new_move[1]))
+                    print(self.instruction())
+                    print(self.state)
+                    new_move = self.state.get_move()
+                    
 
 
 
