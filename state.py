@@ -157,9 +157,6 @@ class State:
                     neighbors.append((3, 5))
         print(neighbors)
 
-
-
-
     def successors(self):
         """
         Generate all the actions that can be performed from this state,
@@ -184,14 +181,15 @@ class State:
             remove()
         """
 
-        successors = []
+        instructions = []
 
         if piece_not_used > 0:
             # Place
             for x in range(7):
                 for y in range(7):
                     if self.grid[x][y] == 0: # Unoccupied
-                        successors.append(('P', x, y))
+                        instructions.append(('P', x, y))
+                        # 'P' means to place a piece on the board
                         
         elif piece_not_used == 0:
             num_pieces = self.pieces_left_onboard(self.grid, self.current_player)
@@ -204,7 +202,7 @@ class State:
                         x = neighbor[0]
                         y = neighbor[1]
                         if self.board[x][y] == 0:
-                            successors.append(('M', x, y))
+                            instructions.append(('M', x, y))
                             # 'M' means to move a piece on the board
                             # i.e. Place + Remove
             elif num_pieces == 3:
@@ -212,7 +210,7 @@ class State:
                 for x in range(7):
                     for y in range(7):
                         if self.grid[x][y] == 0: # Unoccupied
-                            successors.append(('F', x, y))
+                            instructions.append(('F', x, y))
                             # 'F' means to fly a piece on the board
                             # Similar to 'M' but when removing a piece,
                             # we can remove any piece on the board
@@ -231,36 +229,110 @@ class State:
 
         # TODO CALL ISMILL()
 
-        # flag = 'P' # 'P' means to place a piece on the board
+        # flag = 'P' 
 
-        return instruction_to_grid(successors)
+        return instruction_to_grid(instructions)
 
-    def instruction_to_grid(self, successors)
+    def instruction_to_grid(self, instructions)
         """
         Convert instruction and coordinates to actual board
         """
 
 
         next_boards = []
-        for s in successors:
-            instruction = s[0] # P or M or F
-            x = s[1]
-            y = s[2]
+
+        oppo_pieces_left = get_coords(self.opponent)
+
+        for i in instructions:
+            instruction = i[0] # P or M or F
+            x = i[1]
+            y = i[2]
+
             next_board = deepcopy(self.grid)
             # Place a piece
             next_board[x][y] = self.current_player
             
-            if instruction == 'P':
+            if instruction == 'P': # Place
                 if (isMill(next_board, self.current_player)):
+                    # Place & Mill:
+                    # Remove a piece from opponents
+                    # with each piece removed as a new board
+                    for p in oppo_pieces_left:
+                        x = p[0]
+                        y = p[1]
 
-                next_boards.append(next_board)
-            if instruction == 'M':
-                # next_board
+                        next_mill_board = deepcopy(next_board)
+                        # Remove the original piece
+                        next_mill_board[x][y] = 0
+                        next_boards.append(next_mill_board)
+                else:
+                    # Place with no mill
+                    # Just append it
+                    next_boards.append(next_board)
+            elif instruction == 'M': # Move
+
+                neighbors = self.get_neighbors((x,y))
+                for n in neighbors:
+
+                    # Move a piece means the same as
+                    # place a piece in a new coord ("Place")
+                    # and then remove the piece in the old coord ("Remove")
+                    # The "Place" has been finished above
+                    # the following just remove the old piece
+                    move_board = deepcopy(next_board)
+                    move_board[n[0]][n[1]] = 0
 
 
+                    # TODO REFACTOR AS A NEW FUNCTION WITH ABOVE
+                    if (isMill(move_board, self.current_player)):
+                        # Move & Mill:
+                        # Remove a piece from opponents
+                        # with each piece removed as a new board
+                        for p in oppo_pieces_left:
+                            x = p[0]
+                            y = p[1]
+
+                            next_mill_board = deepcopy(move_board)
+                            # Remove the original piece
+                            next_mill_board[x][y] = 0
+                            next_boards.append(next_mill_board)
+                            
+                    else:
+                        next_boards.append(move_board)
             
+            elif instruction == 'F': # Fly
+                pieces = self.get_coords(self.current)
+                for n in pieces:
+
+                    # Fly a piece means the same as
+                    # place a piece in a new coord ("Place")
+                    # and then remove the piece in the old coord ("Remove")
+                    # The "Place" has been finished above
+                    # the following just remove the old piece
+                    fly_board = deepcopy(next_board)
+                    fly_board[n[0]][n[1]] = 0
 
 
+                    # TODO REFACTOR AS A NEW FUNCTION WITH ABOVE
+                    if (isMill(fly_board, self.current_player)):
+                        # Move & Mill:
+                        # Remove a piece from opponents
+                        # with each piece removed as a new board
+                        for p in oppo_pieces_left:
+                            x = p[0]
+                            y = p[1]
+
+                            next_mill_board = deepcopy(fly_board)
+                            # Remove the original piece
+                            next_mill_board[x][y] = 0
+                            next_boards.append(next_mill_board)
+                            
+                    else:
+                        next_boards.append(fly_board)
+
+            else:
+                # Error
+                raise
 
         # self.instruction_to_grid()
         
@@ -277,7 +349,7 @@ class State:
         # https://stackoverflow.com/questions/27175400/how-to-find-the-index-of-a-value-in-2d-array-in-python
         return [(ix,iy) for ix, row in enumerate(self.grid) for iy, i in enumerate(row) if i == player]
 
-    def pieces_left_onboard(self, board, player):
+    def pieces_left_onboard(self, player):
         """
 
         >>> b = [['u' for i in range(7)] for j in range(7)]
@@ -296,10 +368,12 @@ class State:
         0
         """
         # Flatten the board from 2D to 1D
-        flattened = [item for sublist in board for item in sublist]
+        # Source:
+        # https://stackoverflow.com/questions/952914/making-a-flat-list-out-of-list-of-lists-in-python
+        flattened = [item for sublist in self.grid for item in sublist]
         return sum(list(map(lambda piece: 1 if piece == player else 0, flattened)))
 
-    def isMill(b, player):
+    def isMill(self, b, player):
         """
         B is the 7*7 board
         player means the letter representation of the player
