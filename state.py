@@ -176,9 +176,7 @@ class State:
             else:
                 raise error('Something is wrong')
 
-        if isMill():
-            # Mill: 3 together
-            remove()
+        return get_next_states()
         """
 
         instructions = []
@@ -229,7 +227,7 @@ class State:
 
         return get_next_states(instructions)
 
-    def get_next_states(self, instructions)
+    def get_next_states(self, instructions):
         """
         Convert instruction and coordinates to actual board
         """
@@ -285,7 +283,8 @@ class State:
                         
                 else:
                     # Just append it
-                    next_boards.append(new_board)    
+                    next_boards.append(new_board)
+        return next_boards
     
     def get_coords(self, player):
         """
@@ -297,6 +296,7 @@ class State:
 
     def pieces_left_onboard(self, player):
         """
+        Get number of pieces left on the board for @player
 
         >>> b = [['u' for i in range(7)] for j in range(7)]
         >>> pieces_left_onboard(self, b, 'u')
@@ -420,9 +420,6 @@ class State:
         if self.piece_not_used > 0: # place phase.
             return self.get_coords(0)
         elif self.piece_not_used == 0 and self.pieces_left_onboard(self.grid, self.current_player) > 2: # move phase.
-            
-
-
 
     def start(self):
         print("game start...")
@@ -432,6 +429,6 @@ class State:
             print("user's turn...")
             user_move = self.new_move()
 
-
-new_state = State()
-print(new_state.get_coords(1))
+if __name__ == '__main__':
+    new_state = State()
+    print(new_state.get_coords(1))
