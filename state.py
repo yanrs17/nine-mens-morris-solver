@@ -328,7 +328,7 @@ class State:
         0
         """
         # Flatten the board from 2D to 1D
-        flattened = [item for sublist in self.current_player for item in sublist]
+        flattened = [item for sublist in self.grid for item in sublist]
         return sum(list(map(lambda piece: 1 if piece == player else 0, flattened)))
 
     def isMill(b, player):
