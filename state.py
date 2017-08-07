@@ -51,11 +51,11 @@ class State:
             self.grid = grid
         
         if self.current_player_key == 1:
-            self.user_piece_not_used = max(user_pieces_num - 1, 0)
+            self.user_piece_not_used = user_pieces_num
             self.computer_piece_not_used = computer_pieces_num
             self.piece_not_used = self.user_piece_not_used
         else:
-            self.computer_piece_not_used = max(computer_pieces_num - 1, 0)
+            self.computer_piece_not_used = computer_pieces_num
             self.user_piece_not_used = user_pieces_num
             self.piece_not_used = self.computer_piece_not_used
 
@@ -423,6 +423,7 @@ class State:
         
     def get_move(self, phase):
 
+        self.user_piece_not_used = max(self.user_piece_not_used - 1, 0)
         print("each remained...", self.user_piece_not_used, self.computer_piece_not_used)
 
         if phase == 1:
@@ -438,6 +439,7 @@ class State:
             move_x = int(new_move.split(",")[0])
             move_y = int(new_move.split(",")[1])
             return (target_y, target_x), (move_y, move_x)
+
 
         
 
