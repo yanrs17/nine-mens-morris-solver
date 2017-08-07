@@ -18,7 +18,9 @@ class Game:
         while player not in ['c', 'u']:
             player = input('Who plays first?\nc: computer plays first\nu: user plays first\n')
         
-        self.state = state(player, is_new = True) # init game state.
+        self.user_pieces_num = 9
+        self.computer_pieces_num = 9
+        self.state = state(player, is_new = True, grid = [], user_pieces_num = 9, computer_pieces_num = 9) # init game state.
         self.strategy = strategy() # init strategy
 
     def play(self):
@@ -29,8 +31,8 @@ class Game:
                 # user's turn.
                 if self.state.piece_not_used > 0:
                     # in Phase 1, place pieces.
-                    new_move = self.state.get_move(phase = 1)
-                    while self.state.is_valid_move(new_move, phase = 1):
+                    target, new_move = self.state.get_move(phase = 1)
+                    while not self.state.is_valid_move(new_move, phase = 1):
                         print("Illegal move: ({}, {}), please give a valid cordinates.".format(new_move[0], new_move[1]))
                         print(self.instruction())
                         print(self.state)
@@ -39,7 +41,7 @@ class Game:
                 elif self.state.piece_not_used == 0 and self.state.pieces_left_onboard(self.state.grid, self.state.current_player) > 3:
                     # in Phase 2, move pieces.
                     target, new_move = self.state.get_move(phase = 2)
-                    while self.state.is_valid_move(new_move, phase = 2, target = target):
+                    while not self.state.is_valid_move(new_move, phase = 2, target = target):
                         print("Illegal move or invalid target piece, please give a valid cordinates.")
                         print(self.instruction())
                         print(self.state)
@@ -48,7 +50,7 @@ class Game:
                 elif self.state.piece_not_used == 0 and self.state.pieces_left_onboard(self.state.grid, self.state.current_player) == 3:
                     # in Phase 3, fly pieces.
                     target, new_move = self.state.get_move(phase = 3)
-                    while self.state.is_valid_move(new_move, phase = 3, target = target):
+                    while not self.state.is_valid_move(new_move, phase = 3, target = target):
                         print("Illegal move or invalid target piece, please give a valid cordinates.")
                         print(self.instruction())
                         print(self.state)
@@ -67,7 +69,8 @@ class Game:
             
             # start to apply the target and new_move into new state.
             self.state = self.state.apply_target_and_move(target, new_move)
-            print("New game state: ", str(self.state), "\n")
+            print("New game state: \n")
+            print(self.state)
 
         # if game is over.
         if self.state.winner == 'u':

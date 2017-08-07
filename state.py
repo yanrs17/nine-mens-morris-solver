@@ -10,7 +10,7 @@ from copy import deepcopy
 #   without aliasing to the old board
 
 class State:
-    def __init__(self, player='u', is_new = False, grid=[], piece_not_used=9):
+    def __init__(self, player='u', is_new = False, grid=[], user_pieces_num=9, computer_pieces_num=9):
         """
         Create a Nine Men's Morris state
 
@@ -47,18 +47,18 @@ class State:
                 [-1,  0, -1,  0, -1,  0, -1],
                 [0,  -1, -1,  0, -1, -1,  0]
             ]
-            self.piece_not_used = 9
+            self.user_piece_not_used = 9
+            self.computer_piece_not_used = 9
         else:
             self.grid = grid
-            self.piece_not_used = max(piece_not_used - 1, 0) # at least 0.
+            self.user_piece_not_used = max(user_pieces_num - 1, 0)
+            self.computer_piece_not_used = max(computer_pieces_num - 1, 0)
+            self.piece_not_used = self.current_player_key == 1 ? self.user_piece_not_used : self.computer_piece_not_used
 
         self.winner = None
 
         if self.check_lose_state(self.grid, self.opponent): # check if current user wins.
             self.winner = self.current_player
-            self.over = True
-        elif self.check_lose_state(self.grid, self.current_player):
-            self.winner = self.opponent
             self.over = True
         else:
             self.over = False
@@ -81,23 +81,26 @@ class State:
         """
         if self.pieces_left_onboard(self.current_player) == 2:
             return True
+        else:
+            # or if opponent cannot move, and it only happen in Phase 2 and 3, not 1.
+            if self.piece_not_used == 0:
+                player_key = 1 if player == 'u' else 2
+                opponent_key = 2 if player_key == 1 else 1
 
-        player_key = 1 if player == 'u' else 2
-        opponent_key = 2 if player_key == 1 else 1
-
-        # get_neighbors and check if can move.
-        all_blocked = True
-        all_cords = self.get_coords(player_key)
-        for cord in all_cords:
-            its_neighbors = self.get_neighbors(cord)
-            for neighbor in its_neighbors:
-                if not self.grid[neighbor[0]][neighbor[1]] == opponent_key: # if any of neighbors is not opponent.
-                    all_blocked = False
-                    break
-            if not all_blocked:
-                break
-
-        return all_blocked
+                # get_neighbors and check if can move.
+                all_blocked = True
+                all_cords = self.get_coords(player_key)
+                for cord in all_cords:
+                    its_neighbors = self.get_neighbors(cord)
+                    for neighbor in its_neighbors:
+                        if not self.grid[neighbor[0]][neighbor[1]] == opponent_key: # if any of neighbors is not opponent.
+                            all_blocked = False
+                            break
+                    if not all_blocked:
+                        break
+                return all_blocked
+            else:
+                return False
     
     def get_neighbors(self, piece_cord):
         """
@@ -416,18 +419,18 @@ class State:
         
     def get_move(self, phase):
         if phase == 1:
-            new_move = input("Please type the cordinates of your position, e.g. 1,2, meaning (1, 2) of the grid.")
-            x = new_move.split(",")[0]
-            y = new_move.split(",")[1]
-            return (-1, -1), (x, y) # use (-1, -1) represent placing a new piece.
+            new_move = input("Please type the cordinates of your position, e.g. 0,2, meaning (0, 2) of the grid, note that grid's start point sits at upper left corner.")
+            x = int(new_move.split(",")[0])
+            y = int(new_move.split(",")[1])
+            return (-1, -1), (y, x) # use (-1, -1) represent placing a new piece.
         elif phase == 2 or phase == 3:
             target_piece = input("Select the piece by inputing its cordinates.")
-            target_x = target_piece.split(",")[0]
-            target_y = target_piece.split(",")[1]
+            target_x = int(target_piece.split(",")[0])
+            target_y = int(target_piece.split(",")[1])
             new_move = input("Please type the cordinates of your intended new position for target piece at ({}, {}).".format(target_x, target_y))
-            move_x = new_move.split(",")[0]
-            move_y = new_move.split(",")[1]
-            return (target_x, target_y), (move_x, move_y)
+            move_x = int(new_move.split(",")[0])
+            move_y = int(new_move.split(",")[1])
+            return (target_y, target_x), (move_y, move_x)
 
         
 
@@ -465,17 +468,17 @@ class State:
             Especially for user, ask for which piece to remove;
             for computer side, temporarily pick random piece to remove.
         """
+        print("new_move...", new_move)
         if target == (-1, -1):
             # in Phase 1, place a new piece at new_move position.
             new_grid = deepcopy(self.grid)
             new_grid[new_move[0]][new_move[1]] = self.current_player_key
-            return State(self.opponent, is_new = False, grid = new_grid, piece_not_used = self.piece_not_used)
         else:
             # in Phase 2 or 3, place piece at new_move and remove target positon.
             new_grid = deepcopy(self.grid)
             new_grid[target[0]][target[1]] = 0
             new_grid[new_move[0]][new_move[1]] = self.current_player_key
-            return State(self.opponent, is_new = False, grid = new_grid, piece_not_used = self.piece_not_used)
+        return State(self.opponent, is_new = False, grid = new_grid, user_pieces_num = self.user_piece_not_used, computer_pieces_num = self.computer_piece_not_used)
 
 
 if __name__ == '__main__':
