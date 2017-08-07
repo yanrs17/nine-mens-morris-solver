@@ -423,13 +423,14 @@ class State:
         
     def get_move(self, phase):
 
-        self.user_piece_not_used = max(self.user_piece_not_used - 1, 0)
-        print("each remained...", self.user_piece_not_used, self.computer_piece_not_used)
-
         if phase == 1:
             new_move = input("Please type the cordinates of your position, e.g. 0,2, meaning (0, 2) of the grid, note that grid's start point sits at upper left corner.")
             x = int(new_move.split(",")[0])
             y = int(new_move.split(",")[1])
+
+            self.user_piece_not_used = max(self.user_piece_not_used - 1, 0)
+            print("user remained...", self.user_piece_not_used, "; computer remained...", self.computer_piece_not_used)
+
             return (-1, -1), (y, x) # use (-1, -1) represent placing a new piece.
         elif phase == 2 or phase == 3:
             target_piece = input("Select the piece by inputing its cordinates.")
@@ -438,6 +439,10 @@ class State:
             new_move = input("Please type the cordinates of your intended new position for target piece at ({}, {}).".format(target_x, target_y))
             move_x = int(new_move.split(",")[0])
             move_y = int(new_move.split(",")[1])
+
+            self.user_piece_not_used = max(self.user_piece_not_used - 1, 0)
+            print("user remained...", self.user_piece_not_used, "; computer remained...", self.computer_piece_not_used)
+
             return (target_y, target_x), (move_y, move_x)
 
 
@@ -477,7 +482,7 @@ class State:
             Especially for user, ask for which piece to remove;
             for computer side, temporarily pick random piece to remove.
         """
-        print("new_move...", new_move)
+        # print("new_move...", new_move)
         if target == (-1, -1):
             # in Phase 1, place a new piece at new_move position.
             new_grid = deepcopy(self.grid)

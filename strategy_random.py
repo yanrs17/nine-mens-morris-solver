@@ -5,11 +5,7 @@ class StrategyRandom(Strategy):
 
     def suggest_move(self, state):
         # return random.choice(state.possible_next_moves())
-
-        state.computer_piece_not_used = max(state.computer_piece_not_used - 1, 0)
-        print("each remained...", state.user_piece_not_used, state.computer_piece_not_used)
-        print("pieces on board...", state.pieces_left_onboard(state.current_player_key))
-
+        
         if state.piece_not_used > 0:
             # random pick the first empty position.
             return (-1, -1), state.get_coords(0)[0]

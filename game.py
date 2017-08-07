@@ -60,6 +60,10 @@ class Game:
                 # computer's turn.
                 # assume now computer simply random pick a empty position and put pieces or move or fly.
                 target, new_move = self.strategy.suggest_move(self.state)
+        
+                self.state.computer_piece_not_used = max(self.state.computer_piece_not_used - 1, 0)
+                print("user remained...", self.state.user_piece_not_used, "; computer remained...", self.state.computer_piece_not_used)
+
                 if target == (-1, -1): 
                     # in Phase 1.
                     print("Computer place a piece at ({}, {})".format(new_move[1], new_move[0]))
