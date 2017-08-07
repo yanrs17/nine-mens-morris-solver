@@ -37,7 +37,7 @@ class Game:
                         print(self.state.instructions())
                         print(self.state)
                         target, new_move = self.state.get_move(phase = 1)
-                    print("You choose a valid position ({}, {}) to add a new piece.".format(new_move[0], new_move[1]))
+                    print("You choose a valid position ({}, {}) to add a new piece.".format(new_move[1], new_move[0]))
                 elif self.state.piece_not_used == 0 and self.state.pieces_left_onboard(self.state.current_player) > 3:
                     # in Phase 2, move pieces.
                     target, new_move = self.state.get_move(phase = 2)
@@ -62,10 +62,10 @@ class Game:
                 target, new_move = self.strategy.suggest_move(self.state)
                 if target == (-1, -1): 
                     # in Phase 1.
-                    print("Computer place a piece at ({}, {})".format(new_move[0], new_move[1]))
+                    print("Computer place a piece at ({}, {})".format(new_move[1], new_move[0]))
                 else:
                     # in Phase 2 or 3.
-                    print("Computer pick piece at ({}, {}) to move or fly to ({}, {})".format(target[0], target[1], new_move[0], new_move[1]))
+                    print("Computer pick piece at ({}, {}) to move or fly to ({}, {})".format(target[1], target[0], new_move[1], new_move[0]))
             
             # start to apply the target and new_move into new state.
             self.state = self.state.apply_target_and_move(target, new_move)
