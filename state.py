@@ -10,7 +10,7 @@ from copy import deepcopy
 #   without aliasing to the old board
 
 class State:
-    def __init__(self, player='u', is_new = False, grid=[], user_pieces_num=9, computer_pieces_num=9):
+    def __init__(self, player='u', is_new = False, grid=[], user_pieces_num=11, computer_pieces_num=11):
         """
         Create a Nine Men's Morris state
 
@@ -47,8 +47,8 @@ class State:
                 [-1,  0, -1,  0, -1,  0, -1],
                 [0,  -1, -1,  0, -1, -1,  0]
             ]
-            self.user_piece_not_used = 9
-            self.computer_piece_not_used = 9
+            self.user_piece_not_used = 10
+            self.computer_piece_not_used = 10
         else:
             self.grid = grid
         
@@ -89,7 +89,7 @@ class State:
             return True
         else:
             # or if opponent cannot move, and it only happen in Phase 2 and 3, not 1.
-            if self.piece_not_used == -1:
+            if self.piece_not_used == 0:
                 player_key = 1 if player == 'u' else 2
                 opponent_key = 2 if player_key == 1 else 1
 
@@ -196,14 +196,14 @@ class State:
 
         successors = []
 
-        if piece_not_used > -1:
+        if piece_not_used > 0:
             # Place
             for x in range(7):
                 for y in range(7):
                     if self.grid[x][y] == 0: # Unoccupied
                         successors.append(('P', x, y))
                         
-        elif piece_not_used == -1:
+        elif piece_not_used == 0:
             num_pieces = self.pieces_left_onboard(self.current_player)
             if num_pieces > 3:
                 # Move
@@ -407,9 +407,9 @@ class State:
         """
         Given game phases, return different game instructions.
         """
-        if self.piece_not_used > -1:
+        if self.piece_not_used > 0:
             return "Pieces not used up yet, give a position to put the piece on."
-        elif self.piece_not_used == -1 and self.pieces_left_onboard(self.grid, self.current_player) > 2:
+        elif self.piece_not_used == 0 and self.pieces_left_onboard(self.grid, self.current_player) > 2:
             return "Only allow moving the pieces."
 
     def __str__(self):
@@ -424,6 +424,9 @@ class State:
         return result
         
     def get_move(self, phase):
+
+        print("each remained...", self.user_piece_not_used, self.computer_piece_not_used)
+
         if phase == 1:
             new_move = input("Please type the cordinates of your position, e.g. 0,2, meaning (0, 2) of the grid, note that grid's start point sits at upper left corner.")
             x = int(new_move.split(",")[0])
