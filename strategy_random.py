@@ -14,7 +14,7 @@ class StrategyRandom(Strategy):
             for target in self.state.get_coords(2):
                 neighbors = self.state.get_neighbors(target)
                 for n in neighbors:
-                    if n in self.state.get_coords(0)
+                    if n in self.state.get_coords(0):
                         return target, n 
             print("computer cannot figure out where to pick pieces and move...")
         elif self.state.piece_not_used == 0 and self.state.pieces_left_onboard(self.state.grid, self.state.current_player) == 3:
