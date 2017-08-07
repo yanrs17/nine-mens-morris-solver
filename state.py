@@ -53,7 +53,7 @@ class State:
             self.grid = grid
             self.user_piece_not_used = max(user_pieces_num - 1, 0)
             self.computer_piece_not_used = max(computer_pieces_num - 1, 0)
-            self.piece_not_used = self.current_player_key == 1 ? self.user_piece_not_used : self.computer_piece_not_used
+            self.piece_not_used = if self.current_player_key == 1 : self.user_piece_not_used else self.computer_piece_not_used
 
         self.winner = None
 
