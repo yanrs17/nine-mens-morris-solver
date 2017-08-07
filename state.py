@@ -51,12 +51,15 @@ class State:
             self.computer_piece_not_used = 9
         else:
             self.grid = grid
+        
+        if self.current_player_key == 1:
             self.user_piece_not_used = max(user_pieces_num - 1, 0)
+            self.computer_piece_not_used = computer_pieces_num
+            self.piece_not_used = self.user_piece_not_used
+        else:
             self.computer_piece_not_used = max(computer_pieces_num - 1, 0)
-            if self.current_player_key == 1:
-                self.piece_not_used = self.user_piece_not_used
-            else:
-                self.piece_not_used = self.computer_piece_not_used
+            self.user_piece_not_used = user_pieces_num
+            self.piece_not_used = self.computer_piece_not_used
 
         self.winner = None
 
@@ -86,7 +89,7 @@ class State:
             return True
         else:
             # or if opponent cannot move, and it only happen in Phase 2 and 3, not 1.
-            if self.piece_not_used == 0:
+            if self.piece_not_used == -1:
                 player_key = 1 if player == 'u' else 2
                 opponent_key = 2 if player_key == 1 else 1
 
@@ -193,14 +196,14 @@ class State:
 
         successors = []
 
-        if piece_not_used > 0:
+        if piece_not_used > -1:
             # Place
             for x in range(7):
                 for y in range(7):
                     if self.grid[x][y] == 0: # Unoccupied
                         successors.append(('P', x, y))
                         
-        elif piece_not_used == 0:
+        elif piece_not_used == -1:
             num_pieces = self.pieces_left_onboard(self.current_player)
             if num_pieces > 3:
                 # Move
@@ -404,9 +407,9 @@ class State:
         """
         Given game phases, return different game instructions.
         """
-        if self.piece_not_used > 0:
+        if self.piece_not_used > -1:
             return "Pieces not used up yet, give a position to put the piece on."
-        elif self.piece_not_used == 0 and self.pieces_left_onboard(self.grid, self.current_player) > 2:
+        elif self.piece_not_used == -1 and self.pieces_left_onboard(self.grid, self.current_player) > 2:
             return "Only allow moving the pieces."
 
     def __str__(self):
