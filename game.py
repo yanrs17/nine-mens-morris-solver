@@ -18,9 +18,9 @@ class Game:
         while player not in ['c', 'u']:
             player = input('Who plays first?\nc: computer plays first\nu: user plays first\n')
         
-        self.user_pieces_num = 9
-        self.computer_pieces_num = 9
-        self.state = state(player, is_new = True, grid = [], user_pieces_num = 9, computer_pieces_num = 9) # init game state.
+        self.user_pieces_num = 10
+        self.computer_pieces_num = 10
+        self.state = state(player, is_new = True, grid = [], user_pieces_num = 10, computer_pieces_num = 10) # init game state.
         self.strategy = strategy() # init strategy
 
     def play(self):

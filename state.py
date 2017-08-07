@@ -10,7 +10,7 @@ from copy import deepcopy
 #   without aliasing to the old board
 
 class State:
-    def __init__(self, player='u', is_new = False, grid=[], user_pieces_num=11, computer_pieces_num=11):
+    def __init__(self, player='u', is_new = False, grid=[], user_pieces_num=10, computer_pieces_num=10):
         """
         Create a Nine Men's Morris state
 
@@ -47,8 +47,6 @@ class State:
                 [-1,  0, -1,  0, -1,  0, -1],
                 [0,  -1, -1,  0, -1, -1,  0]
             ]
-            self.user_piece_not_used = 10
-            self.computer_piece_not_used = 10
         else:
             self.grid = grid
         
