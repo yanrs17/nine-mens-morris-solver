@@ -463,8 +463,18 @@ class State:
             Especially for user, ask for which piece to remove;
             for computer side, temporarily pick random piece to remove.
         """
-
-
+        # for simplicity, assume no mill situation here now.
+        if target == (-1, -1):
+            # in Phase 1. Add a new piece at new_move position.
+            new_grid = deepcopy(self.grid)
+            new_grid[new_move[0]][new_move[1]] = self.current_player_key
+            return State(self.opponent, is_new = False, grid = new_grid, piece_not_used = self.piece_not_used)
+        else:
+            # in Phase 2 or 3. Move the piece at target to new_move and remove the old one.
+            new_grid = deepcopy(self.grid)
+            new_grid[target[0]][target[1]] = 0
+            new_grid[new_move[0]][new_move[1]] = self.current_player_key
+            return State(self.opponent, is_new = False, grid = new_grid, piece_not_used = self.piece_not_used)
 
 if __name__ == '__main__':
     new_state = State()
