@@ -9,6 +9,8 @@ from copy import deepcopy
 # Copy a new board from the old board
 #   without aliasing to the old board
 
+import re
+
 class State:
     def __init__(self, player='u', is_new = False, grid=[], user_pieces_num=10, computer_pieces_num=10):
         """
@@ -413,7 +415,12 @@ class State:
     def get_move(self, phase):
 
         if phase == 1:
-            new_move = input("Please type the cordinates of your position, e.g. 0,2, meaning (0, 2) of the grid, note that grid's start point sits at upper left corner.\n")
+            while True:
+                new_move = input("Please type the cordinates of your position, e.g. 0,2, meaning (0, 2) of the grid, note that grid's start point sits at upper left corner.\n")
+                if re.match(r"\d,\s*\d", new_move):
+                    break
+                else:
+                    print("Incorrect input, please try again.")
             x = int(new_move.split(",")[0])
             y = int(new_move.split(",")[1])
 
@@ -422,10 +429,20 @@ class State:
 
             return (-1, -1), (y, x) # use (-1, -1) represent placing a new piece.
         elif phase == 2 or phase == 3:
-            target_piece = input("Select the piece by inputing its cordinates.")
+            while True:
+                target_piece = input("Select the piece by inputing its cordinates.")
+                if re.match(r"\d,\s*\d", target_piece):
+                    break
+                else:
+                    print("Incorrect input, please try again.")
             target_x = int(target_piece.split(",")[0])
             target_y = int(target_piece.split(",")[1])
-            new_move = input("Please type the cordinates of your intended new position for target piece at ({}, {}).".format(target_x, target_y))
+            while True:
+                new_move = input("Please type the cordinates of your intended new position for target piece at ({}, {}).".format(target_x, target_y))
+                if re.match(r"\d,\s*\d", target_piece):
+                    break
+                else:
+                    print("Incorrect input, please try again.")
             move_x = int(new_move.split(",")[0])
             move_y = int(new_move.split(",")[1])
 
