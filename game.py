@@ -4,7 +4,7 @@ class Game:
     """
     Game class, use State class from state.py to simulate a game.
     """
-    def __init__(self, state, strategy):
+    def __init__(self, state, strategy, grid = [], user_pieces_prop = -1, computer_pieces_prop = -1):
         """
         player:
             "c": computer
@@ -20,7 +20,28 @@ class Game:
         
         self.user_pieces_num = 9
         self.computer_pieces_num = 9
-        self.state = state(player, is_new = True, grid = [], user_pieces_num = 9, computer_pieces_num = 9) # init game state.
+
+        ### Different initial state setting:
+        # start from Phase 1 with grid empty.
+        # start from Phase 2 with full grid. 1: user; 2: computer
+        
+        if not grid: # init from Phase 1
+            user_pieces_num = 9
+            computer_pieces_num = 9
+            is_new = True
+        else:
+            if user_pieces_prop == 0 and computer_pieces_prop == 0:
+                user_pieces_num = 0
+                computer_pieces_num = 0
+            else:
+                flattened = [item for sublist in grid for item in sublist]
+                user_pieces_num = 9 - sum(list(map(lambda piece: 1 if piece == 1 else 0, flattened)))
+                computer_pieces_num = 9 - sum(list(map(lambda piece: 1 if piece == 2 else 0, flattened)))
+            is_new = False
+
+        self.state = state(player, is_new = is_new, grid = grid, user_pieces_num = user_pieces_num, computer_pieces_num = computer_pieces_num) # init Phase 2.
+
+
         self.strategy = strategy() # init strategy
 
     def play(self):
@@ -28,6 +49,7 @@ class Game:
         print(self.state)
         while not self.state.over:
             if self.state.current_player == 'u': 
+                # print("user's turn", self.state.pieces_left_onboard(self.state.current_player_key), self.state.current_player)
                 # user's turn.
                 if self.state.piece_not_used > 0:
                     # in Phase 1, place pieces.
@@ -38,24 +60,25 @@ class Game:
                         print(self.state)
                         target, new_move = self.state.get_move(phase = 1)
                     print("You choose a valid position ({}, {}) to add a new piece.".format(new_move[1], new_move[0]))
-                elif self.state.piece_not_used == 0 and self.state.pieces_left_onboard(self.state.current_player) > 3:
+                elif self.state.piece_not_used == 0 and self.state.pieces_left_onboard(self.state.current_player_key) > 3:
                     # in Phase 2, move pieces.
+                    # print("in user phase 2 moving...")
                     target, new_move = self.state.get_move(phase = 2)
                     while not self.state.is_valid_move(new_move, phase = 2, target = target):
                         print("Illegal move or invalid target piece, please give a valid cordinates.")
-                        print(self.instruction())
+                        print(self.state.instructions())
                         print(self.state)
                         target, new_move = self.state.get_move(phase = 2)
-                    print("You pick piece at ({}, {}) to move to ({}, {})".format(target[0], target[1], new_move[0], new_move[1]))
-                elif self.state.piece_not_used == 0 and self.state.pieces_left_onboard(self.state.current_player) == 3:
+                    print("You pick piece at ({}, {}) to move to ({}, {})".format(target[1], target[0], new_move[1], new_move[0]))
+                elif self.state.piece_not_used == 0 and self.state.pieces_left_onboard(self.state.current_player_key) == 3:
                     # in Phase 3, fly pieces.
                     target, new_move = self.state.get_move(phase = 3)
                     while not self.state.is_valid_move(new_move, phase = 3, target = target):
                         print("Illegal move or invalid target piece, please give a valid cordinates.")
-                        print(self.instruction())
+                        print(self.state.instructions())
                         print(self.state)
                         target, new_move = self.state.get_move(phase = 3)
-                    print("You pick piece at ({}, {}) to fly to ({}, {})".format(target[0], target[1], new_move[0], new_move[1]))
+                    print("You pick piece at ({}, {}) to fly to ({}, {})".format(target[1], target[0], new_move[1], new_move[0]))
             else:
                 # computer's turn.
                 # assume now computer simply random pick a empty position and put pieces or move or fly.
@@ -63,6 +86,10 @@ class Game:
         
                 self.state.computer_piece_not_used = max(self.state.computer_piece_not_used - 1, 0)
                 print("user remained...", self.state.user_piece_not_used, "; computer remained...", self.state.computer_piece_not_used)
+
+                if new_move == (-1, -1):
+                    print("Computer cannot move, you win!")
+                    return 0
 
                 if target == (-1, -1): 
                     # in Phase 1.
@@ -87,7 +114,7 @@ class Game:
 if __name__ == '__main__':
     from state import State
     from strategy_random import StrategyRandom
-    Game(State, StrategyRandom).play()
+    Game(State, StrategyRandom, grid = []).play()
                     
 
 

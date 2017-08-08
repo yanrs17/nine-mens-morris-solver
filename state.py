@@ -83,7 +83,7 @@ class State:
             True: the player loses
             False: the player does not lose (it does not mean it wins)
         """
-        if self.pieces_left_onboard(self.current_player) == 2:
+        if self.pieces_left_onboard(self.current_player_key) == 2:
             return True
         else:
             # or if opponent cannot move, and it only happen in Phase 2 and 3, not 1.
@@ -202,7 +202,7 @@ class State:
                         successors.append(('P', x, y))
                         
         elif piece_not_used == 0:
-            num_pieces = self.pieces_left_onboard(self.current_player)
+            num_pieces = self.pieces_left_onboard(self.current_player_key)
             if num_pieces > 3:
                 # Move
                 coords = self.get_coords(self.grid, self.current_player)
@@ -311,21 +311,8 @@ class State:
     def pieces_left_onboard(self, player):
         """
         Get number of pieces left on the board for @player
-
-        >>> b = [['u' for i in range(7)] for j in range(7)]
-        >>> pieces_left_onboard(self, 'u')
-        49
-        >>> pieces_left_onboard(self, 'b')
-        0
-        >>> pieces_left_onboard(self, 'w')
-        0
-        >>> b[0][0] = 'b'
-        >>> pieces_left_onboard(self, 'u')
-        48
-        >>> pieces_left_onboard(self, 'b')
-        1
-        >>> pieces_left_onboard(self, 'w')
-        0
+        >>> pieces_left_onboard(self, 1) # meaning user pieces.
+        2
         """
         # Flatten the board from 2D to 1D
         flattened = [item for sublist in self.grid for item in sublist]
@@ -407,7 +394,7 @@ class State:
         """
         if self.piece_not_used > 0:
             return "Pieces not used up yet, give a position to put the piece on."
-        elif self.piece_not_used == 0 and self.pieces_left_onboard(self.grid, self.current_player) > 2:
+        elif self.piece_not_used == 0 and self.pieces_left_onboard(self.current_player_key) > 2:
             return "Only allow moving the pieces."
 
     def __str__(self):
@@ -460,7 +447,7 @@ class State:
             # move phase.
             # 1. target piece should be current player's piece 
             # 2. target cord should be empty and at its neighbor.
-            is_belong_player = this.grid[target[0]][target[1]] == this.current_player_key
+            is_belong_player = self.grid[target[0]][target[1]] == self.current_player_key
             is_at_neighbor = cord in self.get_neighbors(target)
             is_empty = cord in self.get_coords(0)
             return is_belong_player and is_at_neighbor and is_empty
@@ -469,7 +456,7 @@ class State:
             # fly phase.
             # 1. target piece should be current player's piece 
             # 2. target cord should be empty.
-            is_belong_player = this.grid[target[0]][target[1]] == this.current_player_key
+            is_belong_player = self.grid[target[0]][target[1]] == self.current_player_key
             is_empty = cord in self.get_coords(0)
             return is_belong_player and is_empty
 
