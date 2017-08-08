@@ -111,10 +111,10 @@ class Game:
         else:
             print("Tie...")
 
-if __name__ == '__main__':
-    from state import State
-    from strategy_random import StrategyRandom
-    Game(State, StrategyRandom, grid = []).play()
+# if __name__ == '__main__':
+#     from state import State
+#     from strategy_random import StrategyRandom
+#     Game(State, StrategyRandom, grid = []).play()
                     
 
 
