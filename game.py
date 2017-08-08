@@ -4,7 +4,7 @@ class Game:
     """
     Game class, use State class from state.py to simulate a game.
     """
-    def __init__(self, state, strategy):
+    def __init__(self, state, strategy, grid = []):
         """
         player:
             "c": computer
@@ -20,7 +20,24 @@ class Game:
         
         self.user_pieces_num = 9
         self.computer_pieces_num = 9
-        self.state = state(player, is_new = True, grid = [], user_pieces_num = 9, computer_pieces_num = 9) # init game state.
+
+        ### Different initial state setting:
+        # start from Phase 1 with grid empty.
+        # start from Phase 2 with full grid. 1: user; 2: computer
+        
+        if not grid: # init from Phase 1
+            user_pieces_num = 9
+            computer_pieces_num = 9
+            is_new = True
+        else:
+            flattened = [item for sublist in grid for item in sublist]
+            user_pieces_num = 9 - sum(list(map(lambda piece: 1 if piece == 1 else 0, flattened)))
+            computer_pieces_num = 9 - sum(list(map(lambda piece: 1 if piece == 2 else 0, flattened)))
+            is_new = False
+
+        self.state = state(player, is_new = is_new, grid = grid, user_pieces_num = user_pieces_num, computer_pieces_num = computer_pieces_num) # init Phase 2.
+
+
         self.strategy = strategy() # init strategy
 
     def play(self):
@@ -64,6 +81,10 @@ class Game:
                 self.state.computer_piece_not_used = max(self.state.computer_piece_not_used - 1, 0)
                 print("user remained...", self.state.user_piece_not_used, "; computer remained...", self.state.computer_piece_not_used)
 
+                if new_move == (-1, -1):
+                    print("Computer cannot move, you win!")
+                    return 0
+
                 if target == (-1, -1): 
                     # in Phase 1.
                     print("Computer place a piece at ({}, {})".format(new_move[1], new_move[0]))
@@ -87,7 +108,7 @@ class Game:
 if __name__ == '__main__':
     from state import State
     from strategy_random import StrategyRandom
-    Game(State, StrategyRandom).play()
+    Game(State, StrategyRandom, grid = []).play()
                     
 
 
