@@ -5,7 +5,7 @@ class StrategyMinimax(Strategy):
     def __init__(self):
         Strategy.__init__(self)
 
-    def recommend_next_move(self, state):
+    def suggest_move(self, state):
         '''
         Recommend a next move using the current strategy
         '''
