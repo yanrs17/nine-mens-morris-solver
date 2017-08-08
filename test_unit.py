@@ -39,7 +39,22 @@ def test3():
     ]
     Game(State, StrategyRandom, grid = grid).play()
 
-test3()
+def test4():
+    """
+    Init from Phase 3, convenient for testing.
+    """
+    grid = [
+        [0,  -1, -1,  0, -1, -1,  0],
+        [-1,  0, -1,  0, -1,  0, -1],
+        [-1, -1,  0,  2,  2, -1, -1],
+        [1,   1,  0, -1,  0,  0,  0],
+        [-1, -1,  0,  0,  0, -1, -1],
+        [-1,  0, -1,  0, -1,  0, -1],
+        [0,  -1, -1,  2, -1, -1,  1]
+    ]
+    Game(State, StrategyRandom, grid = grid, user_pieces_prop = 0, computer_pieces_prop = 0).play()
+
+test4()
 
 
 

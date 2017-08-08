@@ -4,7 +4,7 @@ class Game:
     """
     Game class, use State class from state.py to simulate a game.
     """
-    def __init__(self, state, strategy, grid = []):
+    def __init__(self, state, strategy, grid = [], user_pieces_prop = -1, computer_pieces_prop = -1):
         """
         player:
             "c": computer
@@ -30,9 +30,13 @@ class Game:
             computer_pieces_num = 9
             is_new = True
         else:
-            flattened = [item for sublist in grid for item in sublist]
-            user_pieces_num = 9 - sum(list(map(lambda piece: 1 if piece == 1 else 0, flattened)))
-            computer_pieces_num = 9 - sum(list(map(lambda piece: 1 if piece == 2 else 0, flattened)))
+            if user_pieces_prop == 0 and computer_pieces_prop == 0:
+                user_pieces_num = 0
+                computer_pieces_num = 0
+            else:
+                flattened = [item for sublist in grid for item in sublist]
+                user_pieces_num = 9 - sum(list(map(lambda piece: 1 if piece == 1 else 0, flattened)))
+                computer_pieces_num = 9 - sum(list(map(lambda piece: 1 if piece == 2 else 0, flattened)))
             is_new = False
 
         self.state = state(player, is_new = is_new, grid = grid, user_pieces_num = user_pieces_num, computer_pieces_num = computer_pieces_num) # init Phase 2.
