@@ -322,31 +322,16 @@ class State:
         flattened = [item for sublist in self.grid for item in sublist]
         return sum(list(map(lambda piece: 1 if piece == player else 0, flattened)))
 
-    def isMill(b, player):
+    def isMill(self, grid, player):
         """
         B is the 7*7 board
         player means the letter representation of the player
         e.g. w (for white) or b (for black)
 
-        >>> b = [['u' for i in range(7)] for j in range(7)]
-        >>> isMill(b, 'b')
-        False
-        >>> b[0][0] = 'b'
-        >>> b[3][0] = 'b'
-        >>> b[6][0] = 'b'
-        >>> isMill(b, 'b')
-        True
-        >>> isMill(b, 'w')
-        False
-        >>> b[0][3] = 'b'
-        >>> b[0][6] = 'b'
-        >>> b[3][0] = 'w'
-        >>> isMill(b, 'b')
-        True
-        >>> b[0][6] = 'b'
-        >>> isMill(b, 'w')
+        >>> isMill(b, 1) # 1 for user; 2 for computer.
         False
         """
+        b = grid
         all_mill_possibilities = [ # 16 possibilities
             # Outer 3
             [b[0][0], b[3][0], b[6][0]], # every 3 pieces form an "m"
@@ -498,6 +483,29 @@ class State:
             new_grid = deepcopy(self.grid)
             new_grid[target[0]][target[1]] = 0
             new_grid[new_move[0]][new_move[1]] = self.current_player_key
+        
+        if self.isMill(new_grid, self.current_player_key):
+            # check if current grid forms a mill. For user, ask for which one to remove; For computer, use functions from strategy heuristics.
+            # print("applying move...check for mill", self.isMill(new_grid, self.current_player_key))
+            tmp = "User" if self.current_player == 'u' else "Computer"
+            print("## {} is forming a mill! ##".format(tmp))
+            if self.current_player == 'u':
+                # User pick a piece to remove.
+                while True:
+                    target_piece = input("Select one opponent's piece to remove.")
+                    target_x = int(target_piece.split(",")[0])
+                    target_y = int(target_piece.split(",")[1])
+                    if re.match(r"\d,\s*\d", target_piece) and new_grid[target_y][target_x] == self.opponent_player_key:
+                        break
+                    else:
+                        print("Incorrect input, please try again.")
+                new_grid[target_y][target_x] = 0
+            else:
+                # Computer pick a piece by strategy.
+                print("Computer will pick a piece by strategy...")
+
+        
+
         return State(self.opponent, is_new = False, grid = new_grid, user_pieces_num = self.user_piece_not_used, computer_pieces_num = self.computer_piece_not_used)
 
 
