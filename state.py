@@ -424,7 +424,7 @@ class State:
     def get_move(self, phase):
 
         if phase == 1:
-            new_move = input("Please type the cordinates of your position, e.g. 0,2, meaning (0, 2) of the grid, note that grid's start point sits at upper left corner.")
+            new_move = input("Please type the cordinates of your position, e.g. 0,2, meaning (0, 2) of the grid, note that grid's start point sits at upper left corner.\n")
             x = int(new_move.split(",")[0])
             y = int(new_move.split(",")[1])
 
@@ -436,7 +436,7 @@ class State:
             target_piece = input("Select the piece by inputing its cordinates.")
             target_x = int(target_piece.split(",")[0])
             target_y = int(target_piece.split(",")[1])
-            new_move = input("Please type the cordinates of your intended new position for target piece at ({}, {}).".format(target_x, target_y))
+            new_move = input("Please type the cordinates of your intended new position for target piece at ({}, {}).\n".format(target_x, target_y))
             move_x = int(new_move.split(",")[0])
             move_y = int(new_move.split(",")[1])
 
