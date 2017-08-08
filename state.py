@@ -88,7 +88,7 @@ class State:
             False: the player does not lose (it does not mean it wins)
         """
 
-        if self.piece_not_used == 0 and self.pieces_left_onboard(self.player_key) == 2:
+        if self.piece_not_used == 0 and self.pieces_left_onboard(player_key) == 2:
             return True
         else:
             # or if opponent cannot move, and it only happen in Phase 2 and 3, not 1.
