@@ -423,7 +423,7 @@ class State:
             target_piece = input("Select the piece by inputing its cordinates.")
             target_x = int(target_piece.split(",")[0])
             target_y = int(target_piece.split(",")[1])
-            new_move = input("Please type the cordinates of your intended new position for target piece at ({}, {}).\n".format(target_x, target_y))
+            new_move = input("Please type the cordinates of your intended new position for target piece at ({}, {}).".format(target_x, target_y))
             move_x = int(new_move.split(",")[0])
             move_y = int(new_move.split(",")[1])
 
