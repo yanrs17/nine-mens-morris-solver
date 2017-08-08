@@ -45,6 +45,7 @@ class Game:
         print(self.state)
         while not self.state.over:
             if self.state.current_player == 'u': 
+                # print("user's turn", self.state.pieces_left_onboard(self.state.current_player_key), self.state.current_player)
                 # user's turn.
                 if self.state.piece_not_used > 0:
                     # in Phase 1, place pieces.
@@ -55,24 +56,25 @@ class Game:
                         print(self.state)
                         target, new_move = self.state.get_move(phase = 1)
                     print("You choose a valid position ({}, {}) to add a new piece.".format(new_move[1], new_move[0]))
-                elif self.state.piece_not_used == 0 and self.state.pieces_left_onboard(self.state.current_player) > 3:
+                elif self.state.piece_not_used == 0 and self.state.pieces_left_onboard(self.state.current_player_key) > 3:
                     # in Phase 2, move pieces.
+                    # print("in user phase 2 moving...")
                     target, new_move = self.state.get_move(phase = 2)
                     while not self.state.is_valid_move(new_move, phase = 2, target = target):
                         print("Illegal move or invalid target piece, please give a valid cordinates.")
-                        print(self.instruction())
+                        print(self.state.instructions())
                         print(self.state)
                         target, new_move = self.state.get_move(phase = 2)
-                    print("You pick piece at ({}, {}) to move to ({}, {})".format(target[0], target[1], new_move[0], new_move[1]))
-                elif self.state.piece_not_used == 0 and self.state.pieces_left_onboard(self.state.current_player) == 3:
+                    print("You pick piece at ({}, {}) to move to ({}, {})".format(target[1], target[0], new_move[1], new_move[0]))
+                elif self.state.piece_not_used == 0 and self.state.pieces_left_onboard(self.state.current_player_key) == 3:
                     # in Phase 3, fly pieces.
                     target, new_move = self.state.get_move(phase = 3)
                     while not self.state.is_valid_move(new_move, phase = 3, target = target):
                         print("Illegal move or invalid target piece, please give a valid cordinates.")
-                        print(self.instruction())
+                        print(self.state.instructions())
                         print(self.state)
                         target, new_move = self.state.get_move(phase = 3)
-                    print("You pick piece at ({}, {}) to fly to ({}, {})".format(target[0], target[1], new_move[0], new_move[1]))
+                    print("You pick piece at ({}, {}) to fly to ({}, {})".format(target[1], target[0], new_move[1], new_move[0]))
             else:
                 # computer's turn.
                 # assume now computer simply random pick a empty position and put pieces or move or fly.
