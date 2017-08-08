@@ -58,7 +58,7 @@ def test4():
     ]
     Game(State, StrategyRandom, grid = grid, user_pieces_prop = 0, computer_pieces_prop = 0).play()
 
-test4()
+test1()
 
 
 

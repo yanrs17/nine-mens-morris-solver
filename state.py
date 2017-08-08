@@ -30,10 +30,12 @@ class State:
         if player == 'c':
             self.current_player = 'c'
             self.current_player_key = 2
+            self.opponent_player_key = 1
             self.opponent = 'u'
         else: 
             self.current_player = 'u'
             self.current_player_key = 1
+            self.opponent_player_key = 2
             self.opponent = 'c'
 
 
@@ -61,14 +63,14 @@ class State:
 
         self.winner = None
 
-        if self.check_lose_state(self.grid, self.opponent): # check if current user wins.
+        if self.check_lose_state(self.grid, self.opponent_player_key): # check if current user wins.
             self.winner = self.current_player
             self.over = True
         else:
             self.over = False
 
 
-    def check_lose_state(self, grid, player):
+    def check_lose_state(self, grid, player_key):
         """
         Winning condition: 
             opponent equals to 2 pieces on board, or
@@ -83,13 +85,13 @@ class State:
             True: the player loses
             False: the player does not lose (it does not mean it wins)
         """
-        if self.pieces_left_onboard(self.current_player_key) == 2:
+
+        if self.piece_not_used == 0 and self.pieces_left_onboard(self.player_key) == 2:
             return True
         else:
             # or if opponent cannot move, and it only happen in Phase 2 and 3, not 1.
             if self.piece_not_used == 0:
-                player_key = 1 if player == 'u' else 2
-                opponent_key = 2 if player_key == 1 else 1
+                opponent_key = 1 if player_key == 2 else 2
 
                 # get_neighbors and check if can move.
                 all_blocked = True
