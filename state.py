@@ -363,6 +363,48 @@ class State:
         #       each m forms a mill
         # "True in ..." means the board forms a mill as long as one of them is a mill
         return True in list(map(lambda m: all(list(map(lambda p: p == player, m))), all_mill_possibilities))
+
+    def getMills(self, grid, player):
+        """
+        B is the 7*7 board
+        player means the letter representation of the player
+        e.g. w (for white) or b (for black)
+
+        >>> millCount(b, 1) # 1 for user; 2 for computer.
+        2 # forms 2 mills for user pieces.
+        """
+        b = grid
+        all_mill_possibilities = [ # 16 possibilities
+            # Outer 3
+            [b[0][0], b[3][0], b[6][0]], # every 3 pieces form an "m"
+            [b[0][0], b[0][3], b[0][6]],
+            [b[0][6], b[3][6], b[6][6]],
+            [b[6][0], b[6][3], b[6][6]],
+            # Middle 3
+            [b[1][1], b[3][1], b[5][1]],
+            [b[1][1], b[1][3], b[1][5]],
+            [b[1][5], b[3][5], b[5][5]],
+            [b[5][1], b[5][3], b[5][5]],
+            # Inner 3
+            [b[2][2], b[3][2], b[4][2]],
+            [b[2][2], b[2][3], b[2][4]],
+            [b[2][4], b[3][4], b[4][4]],
+            [b[4][2], b[4][3], b[4][4]],
+            # Cross 3
+            [b[0][3], b[1][3], b[2][3]],
+            [b[3][0], b[3][1], b[3][2]],
+            [b[3][4], b[3][5], b[3][6]],
+            [b[4][3], b[5][3], b[6][3]]
+            ]
+
+        # "lambda p: p == player" means each piece (e.g. b[0][0]) 
+        #       returns true if it is occupied by the argument "player"
+        # "all(list(map(lambda p: p == player, m)))" means each mill condition "m"
+        #       returns true iff ALL of them (e.g. [b[0][0], b[3][0], b[6][0]]) are true
+        # "lambda m: all(list(map(lambda p: p == player, m)" means whether
+        #       each m forms a mill
+        # "True in ..." means the board forms a mill as long as one of them is a mill
+        return list(map(lambda m: all(list(map(lambda p: p == player, m))), all_mill_possibilities))
         
     # def hashable_state(self):
     #     """
@@ -394,6 +436,17 @@ class State:
         for i in range(7):
             for j in range(7):
                 result += self.cell_types[self.grid[i][j]] + ' '
+            result += '\n'
+        return result
+
+    def printGrid(self, grid):
+        """
+        Print the string representation of the state.
+        """
+        result = ''
+        for i in range(7):
+            for j in range(7):
+                result += self.cell_types[grid[i][j]] + ' '
             result += '\n'
         return result
         
@@ -484,11 +537,14 @@ class State:
             new_grid[target[0]][target[1]] = 0
             new_grid[new_move[0]][new_move[1]] = self.current_player_key
         
-        if self.isMill(new_grid, self.current_player_key):
+        # print("New game state after applying move...", printGrid(new_grid))
+        
+        if sum(self.getMills(new_grid, self.current_player_key)) > 0 and not self.getMills(new_grid, self.current_player_key) == self.getMills(self.grid, self.current_player_key):
+            # if new_grid has mill && new_grid mills distribution not equal to self.grid's.
             # check if current grid forms a mill. For user, ask for which one to remove; For computer, use functions from strategy heuristics.
             # print("applying move...check for mill", self.isMill(new_grid, self.current_player_key))
             tmp = "User" if self.current_player == 'u' else "Computer"
-            print("## {} is forming a mill! ##".format(tmp))
+            print("## {} is forming a mill! ##".format(tmp), self.getMills(new_grid, self.current_player_key))
             if self.current_player == 'u':
                 # User pick a piece to remove.
                 while True:
