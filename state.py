@@ -200,24 +200,24 @@ class State:
 
         successors = []
 
-        if piece_not_used > 0:
+        if self.piece_not_used > 0:
             # Place
             for x in range(7):
                 for y in range(7):
                     if self.grid[x][y] == 0: # Unoccupied
                         successors.append(('P', x, y))
                         
-        elif piece_not_used == 0:
+        elif self.piece_not_used == 0:
             num_pieces = self.pieces_left_onboard(self.current_player_key)
             if num_pieces > 3:
                 # Move
-                coords = self.get_coords(self.grid, self.current_player)
+                coords = self.get_coords(self.current_player_key)
                 for coord in coords:
-                    neighbors = self.get_neighbor(coord)
+                    neighbors = self.get_neighbors(coord)
                     for neighbor in neighbors:
                         x = neighbor[0]
                         y = neighbor[1]
-                        if self.board[x][y] == 0:
+                        if self.grid[x][y] == 0:
                             successors.append(('M', x, y))
                             # 'M' means to move a piece on the board
                             # i.e. Place + Remove
@@ -245,14 +245,14 @@ class State:
             # Exception
             raise
 
-        return get_next_states(instructions)
+        return self.get_next_states(successors)
 
     def get_next_states(self, instructions):
         """
         Convert instruction and coordinates to actual state
         """
         next_boards = []
-        oppox_pieces_left = get_coords(self.opponent)
+        oppox_pieces_left = self.get_coords(self.opponent_player_key)
 
         for instruction, x, y in instructions:
             # instruction can be either P or M or F
@@ -275,7 +275,7 @@ class State:
                 pieces = list(filter(lambda key: neighbors[key] == self.current_player, neighbors))
             elif (instruction == 'F'): # Fly
                 # Any pieces placed by the same player can be removed
-                pieces = self.get_coords(self.current)
+                pieces = self.get_coords(self.current_player_key)
             else:
                 # Error
                 raise
