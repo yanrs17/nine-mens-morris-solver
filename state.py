@@ -541,12 +541,19 @@ class State:
         
         # print("New game state after applying move...", printGrid(new_grid))
         
-        if sum(self.getMills(new_grid, self.current_player_key)) > 0 and not self.getMills(new_grid, self.current_player_key) == self.getMills(self.grid, self.current_player_key):
-            # if new_grid has mill && new_grid mills distribution not equal to self.grid's.
+        if (sum(self.getMills(new_grid, self.current_player_key)) > 0) and \
+            (not self.getMills(new_grid, self.current_player_key) == self.getMills(self.grid, self.current_player_key)) and \
+            (sum(self.getMills(new_grid, self.current_player_key)) >= sum(self.getMills(self.grid, self.current_player_key))):
+            # if 
+            #   1. new_grid has mill. &&
+            #   2. new_grid mills distribution not equal to self.grid's. &&
+            #   3. new_grid mills count is larger than and equal to self.grid's.
+
             # check if current grid forms a mill. For user, ask for which one to remove; For computer, use functions from strategy heuristics.
             # print("applying move...check for mill", self.isMill(new_grid, self.current_player_key))
             tmp = "User" if self.current_player == 'u' else "Computer"
-            print("## {} is forming a mill! ##".format(tmp), self.getMills(new_grid, self.current_player_key))
+            print("## {} is forming a mill! ##".format(tmp))
+            # print("current grid...", new_grid)
             if self.current_player == 'u':
                 # User pick a piece to remove.
                 while True:

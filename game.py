@@ -96,7 +96,12 @@ class Game:
                     print("Computer place a piece at ({}, {})".format(new_move[1], new_move[0]))
                 else:
                     # in Phase 2 or 3.
-                    print("Computer pick piece at ({}, {}) to move or fly to ({}, {})".format(target[1], target[0], new_move[1], new_move[0]))
+                    if self.state.pieces_left_onboard(self.state.current_player_key) == 3:
+                        # Phase 3, fly
+                        print("Computer pick piece at ({}, {}) to fly to ({}, {})".format(target[1], target[0], new_move[1], new_move[0]))
+                    else:
+                        # Phase 2, move.
+                        print("Computer pick piece at ({}, {}) to move to ({}, {})".format(target[1], target[0], new_move[1], new_move[0]))
             
             # start to apply the target and new_move into new state.
             self.state = self.state.apply_target_and_move(target, new_move)
