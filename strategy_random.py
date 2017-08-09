@@ -18,7 +18,7 @@ class StrategyRandom(Strategy):
                 for n in neighbors:
                     if n in state.get_coords(0):
                         avail.append((target, n))
-            return random.choce(avail)
+            return random.choice(avail)
             print("computer cannot figure out where to pick pieces and move...")
             return (-1, -1), (-1, -1) # meaning computer cannot move, user wins.
         elif state.piece_not_used == 0 and state.pieces_left_onboard(state.current_player_key) == 3:

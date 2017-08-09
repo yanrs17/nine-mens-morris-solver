@@ -29,6 +29,8 @@ class State:
         self.grid = []
         self.cell_types = {-1: 'x', 0: '_', 1: 'u', 2: 'c'}
 
+
+
         if player == 'c':
             self.current_player = 'c'
             self.current_player_key = 2
