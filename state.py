@@ -27,7 +27,7 @@ class State:
             2 means c (The cell is currently occupied by the Black player)
         """
         self.grid = []
-        self.cell_types = {-1: 'x', 0: '_', 1: 'u', 2: 'c'}
+        self.cell_types = {-1: 'x', 0: '_', 1: '♘', 2: '♖'}
 
         if player == 'c':
             self.current_player = 'c'

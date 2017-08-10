@@ -55,7 +55,7 @@ class AutoGame:
 
                 # strategy 2 less piece_not_used.
                 self.state.computer_piece_not_used = max(self.state.computer_piece_not_used - 1, 0)
-                print("Strategy {} remained...".format(self.strategy1.name), self.state.user_piece_not_used, "; Strategy {} remained...".format(self.strategy2.name), self.state.computer_piece_not_used)
+                print("Strategy {} remained pieces not used...".format(self.strategy1.name), self.state.user_piece_not_used, "; Strategy {} remained pieces not used...".format(self.strategy2.name), self.state.computer_piece_not_used)
 
                 self.state = State(self.state.opponent, is_new = False, grid = new_grid, user_pieces_num = self.state.user_piece_not_used, computer_pieces_num = self.state.computer_piece_not_used)
             
