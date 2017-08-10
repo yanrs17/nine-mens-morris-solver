@@ -136,7 +136,13 @@ def test10():
     Let two strategy compete with each other.
     """
     print("### Machine V.S Machine ###")
-    AutoGame(State, StrategyMinimax, StrategyRandom).play()
+    res_lst = []
+    for i in range(30):
+        result = AutoGame(State, StrategyMinimax, StrategyRandom).play()
+        # 0: strategy 1 wins; 1: strategy 2 wins.
+        res_lst.append(result)
+    print("Strategy {} wins # {} matches.".format("Minimax", sum(res_lst)))
+    
 
 
 test10()

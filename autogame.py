@@ -35,7 +35,7 @@ class AutoGame:
                 if not self.state.get_successors():
                     # if return no choice for computer, then user wins!
                     print("Strategy {} wins!".format(self.strategy2.name))
-                    return 
+                    return 0
                 new_grid = self.strategy1.suggest_move(self.state)
 
                 # strategy 1 less piece_not_used.
@@ -50,7 +50,7 @@ class AutoGame:
                 if not self.state.get_successors():
                     # if return no choice for computer, then user wins!
                     print("Strategy {} wins!".format(self.strategy1.name))
-                    return 
+                    return 1
                 new_grid = self.strategy2.suggest_move(self.state)
 
                 # strategy 2 less piece_not_used.

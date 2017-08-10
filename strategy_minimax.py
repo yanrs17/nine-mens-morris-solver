@@ -22,6 +22,7 @@ class StrategyMinimax(Strategy):
             if new_state.winner == state.opponent: 
                 # TODO OR JUST state.current_player?
                 return nxt
+            
 
             # If there is a state that leads to mill, return it.
             

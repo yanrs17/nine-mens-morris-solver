@@ -450,7 +450,7 @@ class State:
         result = ''
         for i in range(7):
             for j in range(7):
-                result += self.cell_types[self.grid[i][j]] + ' '
+                result += ' ' + self.cell_types[self.grid[i][j]] + ' '
             result += '\n'
         return result
 
