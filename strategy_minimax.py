@@ -5,6 +5,7 @@ import random
 class StrategyMinimax(Strategy):
     def __init__(self):
         Strategy.__init__(self)
+        self.name = "MiniMax"
 
     def suggest_move(self, state):
         '''
