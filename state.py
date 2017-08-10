@@ -207,7 +207,7 @@ class State:
 
         successors = []
 
-        if self.piece_not_used > 0:
+        if self.piece_not_used > 0: 
             # Place
             for x in range(7):
                 for y in range(7):
@@ -267,7 +267,7 @@ class State:
             next_board = deepcopy(self.grid)
 
             # Place a piece
-            next_board[x][y] = self.current_player
+            next_board[x][y] = self.current_player_key
 
             # Get coords of pieces to be moved
             # according to the instruction
@@ -279,7 +279,7 @@ class State:
                 # Only neighbor pieces placed by the same player
                 # can achieve the new state, thus remove it
                 neighbors = self.get_neighbors_to_hash((x,y))
-                pieces = list(filter(lambda key: neighbors[key] == self.current_player, neighbors))
+                pieces = list(filter(lambda key: neighbors[key] == self.current_player_key, neighbors))
             elif (instruction == 'F'): # Fly
                 # Any pieces placed by the same player can be removed
                 pieces = self.get_coords(self.current_player_key)
@@ -299,7 +299,7 @@ class State:
                 if instruction in ['M', 'F']:
                     new_board[x][y] = 0
 
-                if (isMill(new_board, self.current_player)):
+                if (self.isMill(new_board, self.current_player_key)):
                     # Mill: Remove a piece from opponents
                     # with each piece removed as a new board
                     for x,y in oppo_pieces_left:

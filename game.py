@@ -88,6 +88,10 @@ class Game:
                 # computer's turn.
                 # assume now computer simply random pick a empty position and put pieces or move or fly.
                 # target, new_move = self.strategy.suggest_move(self.state)
+                if not self.state.get_successors():
+                    # if return no choice for computer, then user wins!
+                    print("You beat computer!")
+                    return 
                 new_grid = random.choice(self.state.get_successors())
                 self.state = State(self.state.opponent, is_new = False, grid = new_grid, user_pieces_num = self.state.user_piece_not_used, computer_pieces_num = self.state.computer_piece_not_used)
 
