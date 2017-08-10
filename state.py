@@ -129,7 +129,7 @@ class State:
             elif y == 3:
                 neighbors.append((x, 0))
                 neighbors.append((x, 6))
-                if x == 1: # (1, 3)
+                if x == 0: # (1, 3)
                     neighbors.append((1, 3))
                 elif x == 6: # (5, 3)
                     neighbors.append((5, 3))
@@ -259,7 +259,7 @@ class State:
         Convert instruction and coordinates to actual state
         """
         next_boards = []
-        oppox_pieces_left = self.get_coords(self.opponent_player_key)
+        oppo_pieces_left = self.get_coords(self.opponent_player_key)
 
         for instruction, x, y in instructions:
             # instruction can be either P or M or F
@@ -299,7 +299,14 @@ class State:
                 if instruction in ['M', 'F']:
                     new_board[x][y] = 0
 
-                if (self.isMill(new_board, self.current_player_key)):
+                # if (self.isMill(new_board, self.current_player_key)):
+                # print("in computer get_next_state", self.current_player_key)
+                # print((sum(self.getMills(new_board, self.current_player_key)) > 0), (not self.getMills(new_board, self.current_player_key) == self.getMills(next_board, self.current_player_key)),  (sum(self.getMills(new_board, self.current_player_key)) >= sum(self.getMills(next_board, self.current_player_key))))
+                if (sum(self.getMills(new_board, self.current_player_key)) > 0) and \
+                    (not self.getMills(new_board, self.current_player_key) == self.getMills(next_board, self.current_player_key)) and \
+                    (sum(self.getMills(new_board, self.current_player_key)) >= sum(self.getMills(next_board, self.current_player_key))):
+
+                    print("## Computer is forming a mill! ##")
                     # Mill: Remove a piece from opponents
                     # with each piece removed as a new board
                     for x,y in oppo_pieces_left:
@@ -515,7 +522,11 @@ class State:
             # 2. target cord should be empty and at its neighbor.
             is_belong_player = self.grid[target[0]][target[1]] == self.current_player_key
             is_at_neighbor = cord in self.get_neighbors(target)
+
+            print(target, self.get_neighbors(target))
+
             is_empty = cord in self.get_coords(0)
+            print("check is valid move...", is_belong_player, is_at_neighbor, is_empty)
             return is_belong_player and is_at_neighbor and is_empty
 
         elif phase == 3:

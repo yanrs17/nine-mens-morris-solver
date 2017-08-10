@@ -74,7 +74,23 @@ def test5():
     ]
     Game(State, StrategyRandom, grid = grid, user_pieces_prop = 0, computer_pieces_prop = 0).play()
 
-test5()
+def test6():
+    """
+    Init from Phase 2, testing for computer forming mills.
+    """
+    print("### You are testint Phase 2, especially for computer forming mills. ###")
+    grid = [
+        [1,  -1, -1,  1, -1, -1,  1],
+        [-1,  1, -1,  0, -1,  0, -1],
+        [-1, -1,  0,  2,  0, -1, -1],
+        [1,   2,  2, -1,  2,  2,  2],
+        [-1, -1,  1,  1,  0, -1, -1],
+        [-1,  1, -1,  2, -1,  1, -1],
+        [2,  -1, -1,  0, -1, -1,  2]
+    ]
+    Game(State, StrategyRandom, grid = grid, user_pieces_prop = 0, computer_pieces_prop = 0).play()
+
+test6()
 
 
 
