@@ -139,7 +139,7 @@ def test10():
     AutoGame(State, StrategyMinimax, StrategyRandom).play()
 
 
-test9()
+test8()
 
 
 
