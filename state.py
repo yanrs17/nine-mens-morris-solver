@@ -306,10 +306,10 @@ class State:
                     (not self.getMills(new_board, self.current_player_key) == self.getMills(self.grid, self.current_player_key)) and \
                     (sum(self.getMills(new_board, self.current_player_key)) >= sum(self.getMills(self.grid, self.current_player_key))):
 
-                    print("## Computer is forming a mill! ##")
+                    # print("## Computer is forming a mill! ##")
                     # Mill: Remove a piece from opponents
                     # with each piece removed as a new board
-                    print("computer choose user's pieces...", oppo_pieces_left)
+                    # print("computer choose user's pieces...", oppo_pieces_left)
                     for x,y in oppo_pieces_left:
                         next_mill_board = deepcopy(new_board)
                         # Remove the original piece
