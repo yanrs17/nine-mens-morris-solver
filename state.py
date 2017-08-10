@@ -29,19 +29,17 @@ class State:
         self.grid = []
         self.cell_types = {-1: 'x', 0: '_', 1: 'u', 2: 'c'}
 
-
-
         if player == 'c':
             self.current_player = 'c'
             self.current_player_key = 2
-            self.opponent_player_key = 1
             self.opponent = 'u'
+            self.opponent_player_key = 1
         else: 
             self.current_player = 'u'
             self.current_player_key = 1
-            self.opponent_player_key = 2
-            self.opponent = 'c'
 
+            self.opponent = 'c'
+            self.opponent_player_key = 2
 
         if is_new:
             self.grid = [
