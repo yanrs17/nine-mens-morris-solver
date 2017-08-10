@@ -1,4 +1,5 @@
 from game import Game
+from autogame import AutoGame
 from state import State
 from strategy_random import StrategyRandom
 from strategy_minimax import StrategyMinimax
@@ -107,7 +108,38 @@ def test7():
     ]
     Game(State, StrategyMinimax, grid = grid, user_pieces_prop = 0, computer_pieces_prop = 0).play()
 
-test7()
+def test8():
+    """
+    Init from Phase 1, testing for computer strategy.
+    """
+    print("### You are testint Phase 1, especially for computer forming mills. ###")
+    Game(State, StrategyMinimax, grid = [], user_pieces_prop = -1, computer_pieces_prop = -1).play()
+
+def test9():
+    """
+    Init from Phase 3, testing for computer strategy.
+    """
+    print("### You are testint Phase 3, especially for computer forming mills. ###")
+    grid = [
+        [1,  -1, -1,  0, -1, -1,  0],
+        [-1,  0, -1,  0, -1,  0, -1],
+        [-1, -1,  0,  2,  0, -1, -1],
+        [1,   0,  0, -1,  2,  0,  0],
+        [-1, -1,  0,  0,  2, -1, -1],
+        [-1,  0, -1,  0, -1,  0, -1],
+        [1,  -1, -1,  0, -1, -1,  0]
+    ]
+    Game(State, StrategyMinimax, grid = grid, user_pieces_prop = 0, computer_pieces_prop = 0).play()
+
+def test10():
+    """
+    Let two strategy compete with each other.
+    """
+    print("### Machine V.S Machine ###")
+    AutoGame(State, StrategyMinimax, StrategyRandom).play()
+
+
+test9()
 
 
 

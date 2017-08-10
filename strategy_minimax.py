@@ -53,12 +53,12 @@ class StrategyMinimax(Strategy):
         if mill:
             # Return the first state that leads to mill
             # It does not have to be [0], just an option
-            print("mill length...", len(mill))
+            # print("mill length...", len(mill))
             return mill[0]
 
         # If there is no state that leads to win
         # AND there is no state that leads to mill
         # Just return the first state
         # It does not have to be [0], just an option
-        print("choice length...", len(state.get_successors()))
+        # print("choice length...", len(state.get_successors()))
         return random.choice(state.get_successors())

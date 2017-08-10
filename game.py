@@ -80,7 +80,10 @@ class Game:
                         print(self.state)
                         target, new_move = self.state.get_move(phase = 3)
                     print("You pick piece at ({}, {}) to fly to ({}, {})".format(target[1], target[0], new_move[1], new_move[0]))
-                
+                else:
+                    # user pieces is equal to 2. computer wins.
+                    print("Computer wins.")
+                    return 
                 # start to apply the target and new_move into new state.
                 self.state = self.state.apply_target_and_move(target, new_move)
 
@@ -93,6 +96,8 @@ class Game:
                     print("You beat computer!")
                     return 
                 new_grid = self.strategy.suggest_move(self.state)
+                self.state.computer_piece_not_used = max(self.state.computer_piece_not_used - 1, 0)
+                print("user remained...", self.state.user_piece_not_used, "; computer remained...", self.state.computer_piece_not_used)
                 self.state = State(self.state.opponent, is_new = False, grid = new_grid, user_pieces_num = self.state.user_piece_not_used, computer_pieces_num = self.state.computer_piece_not_used)
             
             # # start to apply the target and new_move into new state.

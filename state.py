@@ -274,7 +274,7 @@ class State:
             if (instruction == 'P'): # Place
                 # We do not remove pieces in "Place"
                 # Just a placeholder for for-loop
-                pieces = ['new','move']
+                pieces = [('new','move')]
             elif (instruction == 'M'): # Move
                 # Only neighbor pieces placed by the same player
                 # can achieve the new state, thus remove it
