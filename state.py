@@ -176,6 +176,13 @@ class State:
         # print(neighbors)
         return neighbors
 
+    def get_neighbors_to_hash(self, piece_cord):
+        lst = self.get_neighbors(piece_cord)
+        res = {}
+        for tup in lst:
+            res[tup] = self.grid[tup[0]][tup[1]]
+        return res
+
     def get_successors(self):
         """
         Generate all the actions that can be performed from this state,
@@ -213,7 +220,7 @@ class State:
                 # Move
                 coords = self.get_coords(self.current_player_key)
                 for coord in coords:
-                    neighbors = self.get_neighbors(coord)
+                    neighbors = self.get_neighbors_to_hash(coord)
                     for neighbor in neighbors:
                         x = neighbor[0]
                         y = neighbor[1]
@@ -271,7 +278,7 @@ class State:
             elif (instruction == 'M'): # Move
                 # Only neighbor pieces placed by the same player
                 # can achieve the new state, thus remove it
-                neighbors = self.get_neighbors((x,y))
+                neighbors = self.get_neighbors_to_hash((x,y))
                 pieces = list(filter(lambda key: neighbors[key] == self.current_player, neighbors))
             elif (instruction == 'F'): # Fly
                 # Any pieces placed by the same player can be removed
