@@ -92,33 +92,10 @@ class Game:
                     # if return no choice for computer, then user wins!
                     print("You beat computer!")
                     return 
-                new_grid = random.choice(self.state.get_successors())
+                new_grid = self.strategy.suggest_move(self.state)
                 self.state = State(self.state.opponent, is_new = False, grid = new_grid, user_pieces_num = self.state.user_piece_not_used, computer_pieces_num = self.state.computer_piece_not_used)
-
-                # Default strategy is to choose random one.
-
-        
-                # self.state.computer_piece_not_used = max(self.state.computer_piece_not_used - 1, 0)
-                # print("user remained...", self.state.user_piece_not_used, "; computer remained...", self.state.computer_piece_not_used)
-
-                # if new_move == (-1, -1):
-                #     print("Computer cannot move, you win!")
-                #     return 0
-
-                # if target == (-1, -1): 
-                #     # in Phase 1.
-                #     print("Computer place a piece at ({}, {})".format(new_move[1], new_move[0]))
-                # else:
-                #     # in Phase 2 or 3.
-                #     if self.state.pieces_left_onboard(self.state.current_player_key) == 3:
-                #         # Phase 3, fly
-                #         print("Computer pick piece at ({}, {}) to fly to ({}, {})".format(target[1], target[0], new_move[1], new_move[0]))
-                #     else:
-                #         # Phase 2, move.
-                #         print("Computer pick piece at ({}, {}) to move to ({}, {})".format(target[1], target[0], new_move[1], new_move[0]))
             
             # # start to apply the target and new_move into new state.
-            # self.state = self.state.apply_target_and_move(target, new_move)
             print("New game state: \n")
             print(self.state)
 
