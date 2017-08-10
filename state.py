@@ -247,10 +247,10 @@ class State:
                 
             else:
                 # Exception
-                raise
+                raise Exception('Number of pieces should be between 2-9, but found {}'.format(num_pieces))
         else:
             # Exception
-            raise
+            raise Exception('Piece not found should be >=0, but found {}'.format(piece_not_used))
 
         return self.get_next_states(successors)
 
