@@ -1,5 +1,6 @@
-from strategy import strategy
+from strategy import Strategy
 from state import *
+import random
 
 class StrategyMinimax(Strategy):
     def __init__(self):
@@ -12,11 +13,12 @@ class StrategyMinimax(Strategy):
 
         mill = []
 
-        opponent_pieces = state.pieces_left_onboard(state.current_player)
+        opponent_pieces = state.pieces_left_onboard(state.current_player_key)
 
         for nxt in state.get_successors():
             # If there is a state that leads to win, return it.
-            if nxt.winner == state.opponent: 
+            new_state = State(state.current_player, is_new = False, grid = nxt, user_pieces_num = 0, computer_pieces_num = 0) # init Phase 2.
+            if new_state.winner == state.opponent: 
                 # TODO OR JUST state.current_player?
                 return nxt
 
@@ -29,26 +31,34 @@ class StrategyMinimax(Strategy):
             # if pieceMilled is 0: not milled
             # if 1: milled
             # else: exception
-            pieceMilled = opponent_pieces - nxt.pieces_left_onboard(nxt.opponent)
-            if pieceMilled == 1:
+            # print("print opponent_pieces", opponent_pieces, new_state.pieces_left_onboard(new_state.opponent_player_key))
+            if (sum(state.getMills(nxt, state.current_player_key)) > 0) and \
+            (not state.getMills(nxt, state.current_player_key) == state.getMills(state.grid, state.current_player_key)) and \
+            (sum(state.getMills(nxt, state.current_player_key)) >= sum(state.getMills(state.grid, state.current_player_key))):
+            # pieceMilled = opponent_pieces - new_state.pieces_left_onboard(new_state.opponent_player_key)
+            # if pieceMilled == 1:
                 # A piece of opponent has been removed
+                
+                # if nxt forms a mill.
                 mill.append(nxt)
-            elif pieceMilled == 0:
+            else:
                 # Do nothing
                 pass
-            else:
-                # Exception
-                raise
+            # else:
+            #     # Exception
+            #     raise Exception(pieceMilled)
 
         # If there is no state that leads to win
         # Check if there is any state that leads to mill
         if mill:
             # Return the first state that leads to mill
             # It does not have to be [0], just an option
+            print("mill length...", len(mill))
             return mill[0]
 
         # If there is no state that leads to win
         # AND there is no state that leads to mill
         # Just return the first state
         # It does not have to be [0], just an option
-        return state.get_successors()[0]
+        print("choice length...", len(state.get_successors()))
+        return random.choice(state.get_successors())

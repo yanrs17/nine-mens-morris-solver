@@ -527,7 +527,7 @@ class State:
             print(target, self.get_neighbors(target))
 
             is_empty = cord in self.get_coords(0)
-            print("check is valid move...", is_belong_player, is_at_neighbor, is_empty)
+            # print("check is valid move...", is_belong_player, is_at_neighbor, is_empty)
             return is_belong_player and is_at_neighbor and is_empty
 
         elif phase == 3:
