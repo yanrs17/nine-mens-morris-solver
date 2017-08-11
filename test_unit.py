@@ -137,11 +137,12 @@ def test10():
     """
     print("### Machine V.S Machine ###")
     res_lst = []
-    for i in range(30):
+    rounds = 30
+    for i in range(rounds):
         result = AutoGame(State, StrategyMinimax, StrategyRandom).play()
         # 0: strategy 1 wins; 1: strategy 2 wins.
         res_lst.append(result)
-    print("Strategy {} wins # {} matches.".format("Minimax", sum(res_lst)))
+    print("Strategy {} wins # {}/{} matches.".format("Minimax", sum(res_lst), rounds))
     
 
 
