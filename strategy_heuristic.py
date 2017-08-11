@@ -17,12 +17,21 @@ class StrategyHeuristic(Strategy):
         opponent_pieces = state.pieces_left_onboard(state.current_player_key)
 
         for nxt in state.get_successors():
+            
             # If there is a state that leads to win, return it.
             new_state = State(state.current_player, is_new = False, grid = nxt, user_pieces_num = 0, computer_pieces_num = 0) # init Phase 2.
             if new_state.winner == state.opponent: 
                 # TODO OR JUST state.current_player?
                 return nxt
             
+
+            # If opponent is going to form a mill, stop them!
+            # nxt is next grid; self.grid is original grid. 
+            #   if in the next grid, find the one being placed, 
+            #       compare every piece coordinates, if is 1 in nxt grid while 2 in self.grid, then is the latest one.
+            #   if is user's piece, will it form the mill? if it is then return it. 
+
+
 
             # If there is a state that leads to mill, return it.
             
