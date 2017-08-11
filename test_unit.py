@@ -3,6 +3,7 @@ from autogame import AutoGame
 from state import State
 from strategy_random import StrategyRandom
 from strategy_minimax import StrategyMinimax
+from strategy_heuristic import StrategyHeuristic
 
 def test1():
     """
@@ -135,7 +136,7 @@ def test10():
     """
     Let two strategy compete with each other.
     """
-    print("### Machine V.S Machine ###")
+    print("### Machine random V.S Machine minimax ###")
     res_lst = []
     rounds = 30
     for i in range(rounds):
@@ -144,9 +145,22 @@ def test10():
         res_lst.append(result)
     print("Strategy {} wins # {}/{} matches.".format("Minimax", sum(res_lst), rounds))
     
+def test11():
+    """
+    Let two strategy compete with each other.
+    """
+    print("### Machine random V.S Machine heuristic ###")
+    res_lst = []
+    rounds = 30
+    for i in range(rounds):
+        result = AutoGame(State, StrategyHeuristic, StrategyRandom).play()
+        # 0: strategy 1 wins; 1: strategy 2 wins.
+        res_lst.append(result)
+    print("Strategy {} wins # {}/{} matches.".format("Heuristic", sum(res_lst), rounds))
+    
 
 
-test10()
+test11()
 
 
 
