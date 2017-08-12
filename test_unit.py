@@ -114,7 +114,7 @@ def test8():
     Init from Phase 1, testing for computer strategy.
     """
     print("### You are testint Phase 1, especially for computer forming mills. ###")
-    Game(State, StrategyMinimax, grid = [], user_pieces_prop = -1, computer_pieces_prop = -1).play()
+    Game(State, StrategyHeuristic, grid = [], user_pieces_prop = -1, computer_pieces_prop = -1).play()
 
 def test9():
     """
@@ -160,6 +160,7 @@ def test11():
     
 
 
+# test8()
 test11()
 
 

@@ -1,5 +1,6 @@
 from strategy import Strategy
 from state import *
+from copy import deepcopy
 import random
 
 class StrategyHeuristic(Strategy):
@@ -19,8 +20,9 @@ class StrategyHeuristic(Strategy):
         for nxt in state.get_successors():
             
             # If there is a state that leads to win, return it.
+            # print("printing out player...", state.current_player, state.opponent)
             new_state = State(state.current_player, is_new = False, grid = nxt, user_pieces_num = 0, computer_pieces_num = 0) # init Phase 2.
-            if new_state.winner == state.opponent: 
+            if new_state.winner == state.current_player: 
                 # TODO OR JUST state.current_player?
                 return nxt
             
@@ -28,8 +30,14 @@ class StrategyHeuristic(Strategy):
             # If opponent is going to form a mill, stop them!
             # nxt is next grid; self.grid is original grid. 
             #   if in the next grid, find the one being placed, 
-            #       compare every piece coordinates, if is 1 in nxt grid while 2 in self.grid, then is the latest one.
+            #       compare every piece coordinates, if is 2 in nxt grid while 0 in self.grid, then is the latest one.
             #   if is user's piece, will it form the mill? if it is then return it. 
+            fake_grid = 
+            for x,y in state.get_coords(state.current_player_key):
+                if state.grid[x][y] == 0:
+                    new_piece = (x, y)
+            
+
 
 
 
