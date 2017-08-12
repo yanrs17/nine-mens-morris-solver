@@ -112,10 +112,19 @@ class Game:
         else:
             print("Tie...")
 
-# if __name__ == '__main__':
-#     from state import State
-#     from strategy_random import StrategyRandom
-#     Game(State, StrategyRandom, grid = []).play()
+if __name__ == '__main__':
+    from state import State
+    from strategy_random import StrategyRandom
+    from strategy_minimax import StrategyMinimax
+    from strategy_heuristic import StrategyHeuristic
+    g = {'r': StrategyRandom, 'm': StrategyMinimax, 'h': StrategyHeuristic}
+    while True:
+        game_to_play = input("r to play random, m to play minimax, h to play heuristic\n")
+        if game_to_play.lower() in g:
+            break
+        else:
+            print("Invalid option, please try again.")
+    Game(State, StrategyRandom, grid = []).play()
                     
 
 

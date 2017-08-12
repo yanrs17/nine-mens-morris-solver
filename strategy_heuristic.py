@@ -6,7 +6,7 @@ import random
 class StrategyHeuristic(Strategy):
     def __init__(self):
         Strategy.__init__(self)
-        self.name = "Heurtistic"
+        self.name = "Heuristic"
 
     def suggest_move(self, state):
         '''

@@ -9,7 +9,7 @@ def test1():
     """
     Init from Phase 1.
     """
-    print("### You are testint Phase 1 ###")
+    print("### You are testing Phase 1 ###")
     Game(State, StrategyRandom, grid = []).play()
 
 def test2():
@@ -17,7 +17,7 @@ def test2():
     Init from Phase 2, convenient for testing.
     > computer cannot move, thus user wins.
     """
-    print("### You are testint Phase 2 ###")
+    print("### You are testing Phase 2 ###")
     grid = [
         [2,  -1, -1,  2, -1, -1,  2],
         [-1,  2, -1,  2, -1,  2, -1],
@@ -33,7 +33,7 @@ def test3():
     """
     Init from Phase 2, convenient for testing.
     """
-    print("### You are testint Phase 2 ###")
+    print("### You are testing Phase 2 ###")
     grid = [
         [2,  -1, -1,  0, -1, -1,  2],
         [-1,  2, -1,  2, -1,  2, -1],
@@ -49,7 +49,7 @@ def test4():
     """
     Init from Phase 3, convenient for testing.
     """
-    print("### You are testint Phase 3 ###")
+    print("### You are testing Phase 3 ###")
     grid = [
         [0,  -1, -1,  0, -1, -1,  0],
         [-1,  0, -1,  0, -1,  0, -1],
@@ -65,7 +65,7 @@ def test5():
     """
     Init from Phase 3, testing for mills.
     """
-    print("### You are testint Phase 3, especially for mills. ###")
+    print("### You are testing Phase 3, especially for mills. ###")
     grid = [
         [1,  -1, -1,  1, -1, -1,  1],
         [-1,  0, -1,  0, -1,  0, -1],
@@ -81,7 +81,7 @@ def test6():
     """
     Init from Phase 2, testing for computer forming mills.
     """
-    print("### You are testint Phase 2, especially for computer forming mills. ###")
+    print("### You are testing Phase 2, especially for computer forming mills. ###")
     grid = [
         [1,  -1, -1,  1, -1, -1,  1],
         [-1,  1, -1,  0, -1,  0, -1],
@@ -97,7 +97,7 @@ def test7():
     """
     Init from Phase 2, testing for computer strategy.
     """
-    print("### You are testint Phase 2, especially for computer forming mills. ###")
+    print("### You are testing Phase 2, especially for computer forming mills. ###")
     grid = [
         [1,  -1, -1,  1, -1, -1,  1],
         [-1,  1, -1,  0, -1,  0, -1],
@@ -113,14 +113,14 @@ def test8():
     """
     Init from Phase 1, testing for computer strategy.
     """
-    print("### You are testint Phase 1, especially for computer forming mills. ###")
+    print("### You are testing Phase 1, especially for computer forming mills. ###")
     Game(State, StrategyHeuristic, grid = [], user_pieces_prop = -1, computer_pieces_prop = -1).play()
 
 def test9():
     """
     Init from Phase 3, testing for computer strategy.
     """
-    print("### You are testint Phase 3, especially for computer forming mills. ###")
+    print("### You are testing Phase 3, especially for computer forming mills. ###")
     grid = [
         [1,  -1, -1,  0, -1, -1,  0],
         [-1,  0, -1,  0, -1,  0, -1],
@@ -180,10 +180,19 @@ def test12():
     res_lst = filter(lambda x: x != None, res_lst)
     print("Strategy {} wins # {}/{} matches.".format("Heuristic", sum(res_lst), rounds))
     
-
-
-# test8()
-test12()
+if __name__ == '__main__':
+    test1()
+    # test2()
+    # test3()
+    # test4()
+    # test5()
+    # test6()
+    # test7()
+    # test8()
+    # test9()
+    # test10()
+    # test11()
+    # test12()
 
 
 
