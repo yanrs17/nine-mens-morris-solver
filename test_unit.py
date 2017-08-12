@@ -130,7 +130,7 @@ def test9():
         [-1,  0, -1,  0, -1,  0, -1],
         [1,  -1, -1,  0, -1, -1,  0]
     ]
-    Game(State, StrategyMinimax, grid = grid, user_pieces_prop = 0, computer_pieces_prop = 0).play()
+    Game(State, StrategyHeuristic, grid = grid, user_pieces_prop = 0, computer_pieces_prop = 0).play()
 
 def test10():
     """
@@ -152,10 +152,13 @@ def test11():
     print("### Machine random V.S Machine heuristic ###")
     res_lst = []
     rounds = 100
+    # rounds = 30
     for i in range(rounds):
-        result = AutoGame(State, StrategyMinimax, StrategyRandom).play()
+        print("=== New Game ===")
+        result = AutoGame(State, StrategyHeuristic, StrategyRandom).play()
         # 0: strategy 1 wins; 1: strategy 2 wins.
         res_lst.append(result)
+        print("================")
     print("Strategy {} wins # {}/{} matches.".format("Heuristic", sum(res_lst), rounds))
     
 

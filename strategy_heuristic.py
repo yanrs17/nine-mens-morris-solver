@@ -14,6 +14,8 @@ class StrategyHeuristic(Strategy):
         '''
 
         mill = []
+        neighbors_prefer_grids = []
+        stop_opponent_move = []
 
         opponent_pieces = state.pieces_left_onboard(state.current_player_key)
 
@@ -27,17 +29,38 @@ class StrategyHeuristic(Strategy):
                 return nxt
             
 
+            # Note that such heuristic only happens at Phase 1 and 2, not 3!
             # If opponent is going to form a mill, stop them!
             # nxt is next grid; self.grid is original grid. 
             #   if in the next grid, find the one being placed, 
             #       compare every piece coordinates, if is 2 in nxt grid while 0 in self.grid, then is the latest one.
             #   if is user's piece, will it form the mill? if it is then return it. 
-            fake_grid = 
-            for x,y in state.get_coords(state.current_player_key):
-                if state.grid[x][y] == 0:
-                    new_piece = (x, y)
-            
+            if state.pieces_left_onboard(state.current_player_key) > 3:
+                fake_grid = deepcopy(state.grid)
+                new_piece = (-1, -1)
+                for x,y in [(ix,iy) for ix, row in enumerate(nxt) for iy, i in enumerate(row) if i == state.current_player_key]:
+                    # print("new_piece...", x, y, state.grid[x][y])
+                    if state.grid[x][y] == 0:
+                        new_piece = (x, y)
+                fake_grid[new_piece[0]][new_piece[1]] = state.opponent_player_key
+                if (sum(state.getMills(fake_grid, state.opponent_player_key)) > 0) and \
+                    (not state.getMills(fake_grid, state.opponent_player_key) == state.getMills(state.grid, state.opponent_player_key)) and \
+                    (sum(state.getMills(fake_grid, state.opponent_player_key)) >= sum(state.getMills(state.grid, state.opponent_player_key))):
+                    # print("user may form a mill...", nxt)
+                    # return nxt
+                    stop_opponent_move = nxt
 
+            # if the new_piece is in the neighbors of current pieces' neighbors.
+            if state.piece_not_used > 0:
+                new_piece = (-1, -1)
+                neighbors = []
+                for x,y in [(ix,iy) for ix, row in enumerate(nxt) for iy, i in enumerate(row) if i == state.current_player_key]:
+                    # print("new_piece...", x, y, state.grid[x][y])
+                    neighbors.extend(state.get_neighbors((x, y)))
+                    if state.grid[x][y] == 0:
+                        new_piece = (x, y)
+                if new_piece in neighbors:
+                    neighbors_prefer_grids.append(nxt)
 
 
 
@@ -73,10 +96,15 @@ class StrategyHeuristic(Strategy):
             # Return the first state that leads to mill
             # It does not have to be [0], just an option
             # print("mill length...", len(mill))
-            return mill[0]
+            return random.choice(mill)
 
-        # If there is no state that leads to win
-        # AND there is no state that leads to mill
-        # Choose a random one
-        # print("choice length...", len(state.get_successors()))
-        return random.choice(state.get_successors())
+        if stop_opponent_move:
+            return stop_opponent_move
+
+
+        # not use random to return! find neighbors! if any neibor is empty, use that to form close regional relationship.
+        if neighbors_prefer_grids:
+            print("close pieces are more preferred...")
+            return random.choice(neighbors_prefer_grids)
+        else:
+            return random.choice(state.get_successors())
