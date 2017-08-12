@@ -168,8 +168,8 @@ def test12():
     """
     print("### Machine heuristic V.S Machine minimax ###")
     res_lst = []
-    # rounds = 100
-    rounds = 10
+    rounds = 50
+    # rounds = 10
     for i in range(rounds):
         print("=== New Game ===")
         result = AutoGame(State, StrategyHeuristic, StrategyMinimax).play()
@@ -177,7 +177,7 @@ def test12():
         # 0: strategy 1 wins; 1: strategy 2 wins.
         res_lst.append(result)
         print("================")
-    print(res_lst)
+    res_lst = filter(lambda x: x != None, res_lst)
     print("Strategy {} wins # {}/{} matches.".format("Heuristic", sum(res_lst), rounds))
     
 
