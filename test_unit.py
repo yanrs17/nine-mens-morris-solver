@@ -151,9 +151,9 @@ def test11():
     """
     print("### Machine random V.S Machine heuristic ###")
     res_lst = []
-    rounds = 30
+    rounds = 100
     for i in range(rounds):
-        result = AutoGame(State, StrategyHeuristic, StrategyRandom).play()
+        result = AutoGame(State, StrategyMinimax, StrategyRandom).play()
         # 0: strategy 1 wins; 1: strategy 2 wins.
         res_lst.append(result)
     print("Strategy {} wins # {}/{} matches.".format("Heuristic", sum(res_lst), rounds))
