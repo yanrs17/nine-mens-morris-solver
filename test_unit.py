@@ -156,15 +156,34 @@ def test11():
     for i in range(rounds):
         print("=== New Game ===")
         result = AutoGame(State, StrategyHeuristic, StrategyRandom).play()
+        # result = AutoGame(State, StrategyMinimax, StrategyRandom).play()
         # 0: strategy 1 wins; 1: strategy 2 wins.
         res_lst.append(result)
         print("================")
     print("Strategy {} wins # {}/{} matches.".format("Heuristic", sum(res_lst), rounds))
     
+def test12():
+    """
+    Let two strategy compete with each other.
+    """
+    print("### Machine heuristic V.S Machine minimax ###")
+    res_lst = []
+    # rounds = 100
+    rounds = 10
+    for i in range(rounds):
+        print("=== New Game ===")
+        result = AutoGame(State, StrategyHeuristic, StrategyMinimax).play()
+        # result = AutoGame(State, StrategyMinimax, StrategyRandom).play()
+        # 0: strategy 1 wins; 1: strategy 2 wins.
+        res_lst.append(result)
+        print("================")
+    print(res_lst)
+    print("Strategy {} wins # {}/{} matches.".format("Heuristic", sum(res_lst), rounds))
+    
 
 
 # test8()
-test11()
+test12()
 
 
 

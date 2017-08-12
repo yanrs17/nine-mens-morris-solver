@@ -11,7 +11,7 @@ class StrategyMinimax(Strategy):
         '''
         Recommend a next move using the current strategy
         '''
-        return self.get_minimax(state, 1, True)[0].grid
+        return self.get_minimax(state, 2, True)[0].grid
 
         # mill = []
 
@@ -86,11 +86,11 @@ class StrategyMinimax(Strategy):
             if state.check_lose_state(state.grid, state.opponent_player_key):
                 # If opponent loses, it means the current player wins
                 # We give it 1 point
-                return state, -1
+                return state, 1
             if state.check_lose_state(state.grid, state.current_player_key):
                 # If current player loses
                 # We give it -1 point
-                return state, 1
+                return state, -1
             # This is game there is no tie
             # 0 just means it is neither win or lose
             # TODO MORE HEURISTICS HERE
