@@ -4,14 +4,17 @@ import random
 
 class StrategyMinimax(Strategy):
     def __init__(self):
+        self.difficulty = 2 # Either 1 or 2 or 3
+
         Strategy.__init__(self)
         self.name = "MiniMax"
+
 
     def suggest_move(self, state):
         '''
         Recommend a next move using the current strategy
         '''
-        return self.get_minimax(state, 2, True)[0].grid
+        return self.get_minimax(state, self.difficulty, True)[0].grid
 
         # mill = []
 

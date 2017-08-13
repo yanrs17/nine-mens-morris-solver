@@ -1,4 +1,8 @@
 from state import State
+from strategy_random import StrategyRandom
+from strategy_minimax import StrategyMinimax
+from strategy_heuristic import StrategyHeuristic
+from autogame import AutoGame
 import random
 
 class Game:
@@ -15,6 +19,8 @@ class Game:
             import from state.py,
 
         """
+
+        self.strategy = strategy() # init strategy
         player = ''
         while player not in ['c', 'u']:
             player = input('Who plays first?\nc: computer plays first\nu: user plays first\n')
@@ -41,9 +47,6 @@ class Game:
             is_new = False
 
         self.state = state(player, is_new = is_new, grid = grid, user_pieces_num = user_pieces_num, computer_pieces_num = computer_pieces_num) # init Phase 2.
-
-
-        self.strategy = strategy() # init strategy
 
     def play(self):
         print("Game init...")
@@ -113,18 +116,69 @@ class Game:
             print("Tie...")
 
 if __name__ == '__main__':
-    from state import State
-    from strategy_random import StrategyRandom
-    from strategy_minimax import StrategyMinimax
-    from strategy_heuristic import StrategyHeuristic
     g = {'r': StrategyRandom, 'm': StrategyMinimax, 'h': StrategyHeuristic}
+
     while True:
-        game_to_play = input("r to play random, m to play minimax, h to play heuristic\n")
-        if game_to_play.lower() in g:
+        players = input("1 for player vs. AI, 2 for AI vs. AI: ")
+        if players in ['1', '2']:
             break
         else:
             print("Invalid option, please try again.")
-    Game(State, StrategyRandom, grid = []).play()
-                    
+    
+    if players == '1':
+        while True:
+            game_to_play = input("r to play random, m to play minimax, h to play heuristic\n")
+            if game_to_play.lower() in g:
+                break
+            else:
+                print("Invalid option, please try again.")
+        Game(State, g[game_to_play], grid = []).play()
+    elif players == '2':
+        # from strategy_random import StrategyRandom
+        # from strategy_minimax import StrategyMinimax
+        # from strategy_heuristic import StrategyHeuristic
 
+        # g = {'r': StrategyRandom, 'm': StrategyMinimax, 'h': StrategyHeuristic}
+        res_lst = []
+        while True:
+            try:
+                rounds = int(input("Input number of rounds: "))
+                if rounds > 0:
+                    break
+                else:
+                    print("Invalid option, please try again.")
+            except ValueError:
+                print("Invalid option, please try again.")
+        # rounds = 50
+        # rounds = 10
 
+        # if strategy1 is None or strategy2 is None:
+
+        while True:
+            print("player 1:")
+            game1 = input("r to play random, m to play minimax, h to play heuristic\n")
+            if game1.lower() in g:
+                break
+            else:
+                print("Invalid option, please try again.")
+        strategy1 =  g[game1]
+
+        while True:
+            print("player 2:")
+            game2 = input("r to play random, m to play minimax, h to play heuristic\n")
+            if game2.lower() in g:
+                break
+            else:
+                print("Invalid option, please try again.")
+        strategy2 =  g[game2]
+        for i in range(rounds):
+            print("=== New Game ===")
+            result = AutoGame(State, strategy1, strategy2).play()
+            # result = AutoGame(State, StrategyMinimax, StrategyRandom).play()
+            # 0: strategy 1 wins; 1: strategy 2 wins.
+            res_lst.append(result)
+            print("================")
+        res_lst = filter(lambda x: x != None, res_lst)
+        print("Player 1 wins # {}/{} matches.".format(sum(res_lst), rounds))
+    else:
+        raise Exception('Not 1 or 2')

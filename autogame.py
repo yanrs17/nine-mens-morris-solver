@@ -22,6 +22,7 @@ class AutoGame:
         self.computer_pieces_num = 9
 
         self.state = state(player, is_new = True, grid = [], user_pieces_num = 9, computer_pieces_num = 9)
+
         self.strategy1 = strategy1() # init strategy
         self.strategy2 = strategy2() 
 

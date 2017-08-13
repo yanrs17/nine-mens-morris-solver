@@ -1,19 +1,23 @@
 # Nine-Mens-Morris-Solver
-```
-if not isAllUsed():
-    place()
-else:
-    if pieceLeft > 3:
-        move()
-    elif pieceLeft == 3:
-        fly()
-    elif pieceLeft == 2:
-        lose()
-        # Means opponent wins
-    else:
-        raise error('Something is wrong')
 
-if isMill():
-    # Mill: 3 together
-    remove()
+## Representation
+- Knight represents the user
+- Rock represents the computer
+
+## Types
+- Player vs. AI
+- AI vs. AI
+
+## How to play
+Run
 ```
+python3 game.py
+```
+and follow the instruction.
+
+## How to change difficulty of minimax strategy
+Note that the difficulty (depth) of minimax can be changed in line 7 of strategy_minimax.py. The suggested values for difficulty is 1, 2 or 3
+
+## Test
+- We also add some tests in test.py.
+- tests can be changed starting at line 178, just comment and uncomment different tests.
