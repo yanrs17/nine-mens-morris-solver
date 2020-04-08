@@ -240,7 +240,7 @@ class State:
             elif num_pieces == 2:
                 # Lose
                 # It is checked in the next state
-                # TODO: EFFICIENCY?
+                # TODO: EFFICIENCY
                 pass
                 
             else:
